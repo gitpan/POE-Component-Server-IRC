@@ -1,0 +1,9 @@
+Changes
+lib/POE/Filter/IRCD.pm
+lib/POE/Component/Server/IRC.pm
+lib/POE/Component/Server/IRC/auth.pm
+lib/POE/Component/Server/IRC/client.pm
+Makefile.PL
+MANIFEST
+README
+test.pl

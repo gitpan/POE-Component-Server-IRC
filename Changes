@@ -1,0 +1,3 @@
+I need to figure out how  to dump my cvs logs to this file upon make dist
+-d:pserver:anonymous@kuiki.net:/var/lib/cvs login (no password)
+                                            co POE-Component-Server-IRC
