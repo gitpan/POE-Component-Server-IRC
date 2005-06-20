@@ -1,30 +1,6 @@
-POE:Component:Server:IRC
-=====================================
+POE::Component::Server::IRC
+===========================
 
-This POE component is designed to provide an abstract, subclassable IRC
-daemon framework. Internal structures are not concrete in design as of
-this release. Please see the samples/ tree for code samples.
+A POE component that implements a standalone RFC-compliant IRC server.
 
-INSTALLATION
-
-To install this module type the following:
-
-   perl Makefile.PL
-   make
-   make test
-   make install
-
-DEPENDENCIES
-
-This module requires these other modules and libraries:
-
-ExtUtils::MakeMaker
-POE
-Socket
-Gtk (Optional)
-
-COPYRIGHT AND LICENCE
-
-This program may be used under the same license terms as perl itself.
-
-Copyright (C) 2003 Jonathan Steinert
+The examples/ directory contains some example scripts.
