@@ -129,16 +129,20 @@ sub irc_public {
   my ($kernel, $sender, $who, $where, $msg) = @_[KERNEL, SENDER, ARG0 .. ARG2];
   my $nick = (split /!/, $who)[0];
   #print "<$nick:@{$where}[0]> $msg\n";
-  $kernel->post( $sender => privmsg => $where,
-                 $eliza->transform($msg)     # Filter it through a Chatbot.
-               );
+  #$kernel->post( $sender => privmsg => $where,
+  #               $eliza->transform($msg)     # Filter it through a Chatbot.
+  #             );
   undef;
 }
 
 sub irc_join {
   my ($kernel, $sender, $who, $where) = @_[KERNEL, SENDER, ARG0, ARG1];
   my $nick = (split /!/, $who)[0];
-  $kernel->post ( $sender, 'privmsg', $where, "Hi, $nick!" );
+  my ($botcount) = $ARGV[2] || 10;
+
+  if ( $nick =~ /$botcount$/ ) {
+	$kernel->post ( $sender, 'privmsg', [ $where ], "Hi, $nick!" );
+  }
   undef;
 }
 
