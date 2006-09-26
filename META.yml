@@ -1,21 +1,23 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         POE-Component-Server-IRC
-version:      0.99_04
-version_from: lib/POE/Component/Server/IRC.pm
-installdirs:  site
-requires:
-    Algorithm::Diff:               1.19
-    Carp:                          0
-    Date::Format:                  0
-    Net::Netmask:                  1.9012
-    POE:                           0.3202
-    POE::Component::Client::DNS:   0.99
-    POE::Component::Client::Ident: 1
-    POE::Component::IRC:           4.98
-    POE::Filter::IRCD:             1.7
-    Socket:                        0
-    warnings:                      0
-
+author: 'Chris Williams <chris@bingosnet.co.uk>'
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30
+generated_by: Module::Install version 0.64
+license: perl
+module_name: POE::Component::Server::IRC
+name: POE-Component-Server-IRC
+no_index:
+  directory:
+    - inc
+    - t
+requires:
+  Algorithm::Diff: 1.19
+  Carp: 0
+  Date::Format: 0
+  Net::Netmask: 1.9012
+  POE: 0.3202
+  POE::Component::Client::DNS: 0.99
+  POE::Component::Client::Ident: 1
+  POE::Component::IRC: 4.98
+  POE::Filter::IRCD: 1.7
+  Socket: 0
+  warnings: 0
+version: 1.00
