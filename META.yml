@@ -1,14 +1,14 @@
-author: 'Chris Williams <chris@bingosnet.co.uk>'
+author: Chris Williams <chris@bingosnet.co.uk>
 distribution_type: module
 generated_by: Module::Install version 0.64
 license: perl
 module_name: POE::Component::Server::IRC
 name: POE-Component-Server-IRC
-no_index:
-  directory:
+no_index: 
+  directory: 
     - inc
     - t
-requires:
+requires: 
   Algorithm::Diff: 1.19
   Carp: 0
   Date::Format: 0
@@ -20,4 +20,4 @@ requires:
   POE::Filter::IRCD: 1.7
   Socket: 0
   warnings: 0
-version: 1.03
+version: 1.04

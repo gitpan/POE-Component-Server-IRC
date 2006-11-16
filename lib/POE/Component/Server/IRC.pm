@@ -15,8 +15,8 @@ use POE::Component::Server::IRC::Plugin qw(:ALL);
 use Date::Format;
 use vars qw($VERSION $REVISION);
 
-$VERSION = '1.03';
-($REVISION) = (q$LastChangedRevision: 101 $=~/(\d+)/g);
+$VERSION = '1.04';
+($REVISION) = (q$LastChangedRevision: 105 $=~/(\d+)/g);
 
 sub spawn {
   my $package = shift;
@@ -1955,7 +1955,7 @@ sub _daemon_cmd_mode {
     my $mode_count = 0;
     while( my $mode = shift @{ $parsed_mode->{modes} } ) {
       if ( $mode !~ /[eIbklimnpstohv]/ ) {
-	push @{ $ref }, [ '472', ( split //, $mode )[1] ] unless $unknown;
+	push @{ $ref }, [ '472', ( split //, $mode )[1], $chan ] unless $unknown;
 	$unknown++;
 	next;
       }
