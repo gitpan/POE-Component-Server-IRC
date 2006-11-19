@@ -16,8 +16,8 @@ requires:
   POE: 0.3202
   POE::Component::Client::DNS: 0.99
   POE::Component::Client::Ident: 1
-  POE::Component::IRC: 4.98
-  POE::Filter::IRCD: 1.7
+  POE::Component::IRC: 5.13
+  POE::Filter::IRCD: 2.2
   Socket: 0
   warnings: 0
-version: 1.04
+version: 1.05
