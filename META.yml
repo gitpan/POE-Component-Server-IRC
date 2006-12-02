@@ -20,4 +20,4 @@ requires:
   POE::Filter::IRCD: 2.2
   Socket: 0
   warnings: 0
-version: 1.05
+version: 1.06
