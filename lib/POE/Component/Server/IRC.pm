@@ -15,8 +15,8 @@ use POE::Component::Server::IRC::Plugin qw(:ALL);
 use Date::Format;
 use vars qw($VERSION $REVISION);
 
-$VERSION = '1.08';
-($REVISION) = (q$LastChangedRevision: 114 $=~/(\d+)/g);
+$VERSION = '1.09';
+($REVISION) = (q$LastChangedRevision: 116 $=~/(\d+)/g);
 
 sub spawn {
   my $package = shift;
