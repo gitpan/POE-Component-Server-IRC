@@ -20,11 +20,11 @@ requires:
   Carp: 0
   Date::Format: 0
   Net::Netmask: 1.9012
-  POE: 0.3202
-  POE::Component::Client::DNS: 0.99
+  POE: 0.38
+  POE::Component::Client::DNS: 1
   POE::Component::Client::Ident: 1
   POE::Component::IRC: 5.18
   POE::Filter::IRCD: 2.2
   Socket: 0
   warnings: 0
-version: 1.18
+version: 1.20
