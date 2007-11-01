@@ -1,10 +1,11 @@
 --- 
 abstract: A fully event-driven networkable IRC server daemon module
-author: Chris Williams <chris@bingosnet.co.uk>
+author: 
+  - Chris Williams <chris@bingosnet.co.uk>
 build_requires: 
   Test::More: 0.47
 distribution_type: module
-generated_by: Module::Install version 0.67
+generated_by: Module::Install version 0.68
 license: perl
 meta-spec: 
   url: http://module-build.sourceforge.net/META-spec-v1.3.html
@@ -27,4 +28,4 @@ requires:
   POE::Filter::IRCD: 2.2
   Socket: 0
   warnings: 0
-version: 1.22
+version: 1.24
