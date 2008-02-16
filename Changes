@@ -1,3 +1,19 @@
+==============================
+9999-99-99 99:99:99 (untagged)
+==============================
+
+  2008-02-16 13:50:23 (r144) by bingos; Makefile.PL M; Changes M
+
+    Forgot to add prereq for Crypt::PasswdMD5
+
+  2008-02-16 13:13:57 (r142) by bingos
+  t/1_common.t M; lib/POE/Component/Server/IRC/Common.pm M; Makefile.PL
+  M; Changes M; lib/POE/Component/Server/IRC.pm M
+
+    Added crypt/md5 encryption for OPER passwords. New funcs in ::Common,
+    mkpasswd and chkpasswd. Updated common test. Thanks to nanonyme for
+    the suggestion. 
+
 ========================
 2007-11-01 14:00:41 1.24
 ========================
