@@ -28,4 +28,4 @@ requires:
   POE::Component::IRC: 5.18
   POE::Filter::IRCD: 2.2
   Socket: 0
-version: 1.26
+version: 1.28
