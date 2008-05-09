@@ -15,8 +15,8 @@ use POE::Component::Server::IRC::Plugin qw(:ALL);
 use Date::Format;
 use vars qw($VERSION $REVISION);
 
-$VERSION = '1.30';
-($REVISION) = (q$LastChangedRevision: 148 $=~/(\d+)/g);
+$VERSION = '1.32';
+($REVISION) = (q$LastChangedRevision: 154 $=~/(\d+)/g);
 
 sub spawn {
   my $package = shift;
@@ -6274,6 +6274,12 @@ from POE::Component::Server::IRC::Plugin as so:
 =head1 AUTHOR
 
 Chris 'BinGOs' Williams
+
+=head1 LICENSE
+
+Copyright C<(c)> Chris Williams
+
+This module may be used, modified, and distributed under the same terms as Perl itself. Please see the license that came with your Perl distribution for details.
 
 =head1 KUDOS
 
