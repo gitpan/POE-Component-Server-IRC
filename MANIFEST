@@ -7,11 +7,14 @@ examples/test-harness.pl
 examples/test-ircd.pl
 examples/test-oper.pl
 inc/Module/Install.pm
-inc/Module/Install/AuthorTests.pm
+inc/Module/Install/Metadata.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Makefile.pm
-inc/Module/Install/MakeMaker.pm
-inc/Module/Install/Metadata.pm
+inc/Module/Install/AuthorTests.pm
+inc/Module/Install/WriteAll.pm
+inc/Module/Install/Win32.pm
+inc/Module/Install/Can.pm
+inc/Module/Install/Fetch.pm
 ircd.crt
 ircd.key
 lib/POE/Component/Server/IRC.pm
@@ -42,6 +45,7 @@ t/ts_07_callerid.t
 t/ts_08_operserv.t
 t/ts_09_serrano_spoofs.t
 t/ts_10_eggzeck_topic.t
+t/ts_11_hinrik_umode.t
 xt/pod.t
 xt/pod_coverage.t
 tools/svn-log.perl
