@@ -5,7 +5,7 @@ author:
 build_requires:
   Test::More: 0.47
 distribution_type: module
-generated_by: 'Module::Install version 0.77'
+generated_by: 'Module::Install version 0.78'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -13,10 +13,10 @@ meta-spec:
 name: POE-Component-Server-IRC
 no_index:
   directory:
-    - xt
+    - examples
     - inc
     - t
-    - examples
+    - xt
 requires:
   Algorithm::Diff: 1.19
   Carp: 0
@@ -27,6 +27,7 @@ requires:
   POE::Component::Client::DNS: 1
   POE::Component::Client::Ident: 1
   POE::Component::IRC: 5.7
+  POE::Component::Pluggable: 1.14
   POE::Filter::IRCD: 2.2
   POE::Filter::Line: 0
   POE::Filter::Stackable: 0
@@ -36,4 +37,4 @@ requires:
   perl: 5.6.0
 resources:
   license: http://dev.perl.org/licenses/
-version: 1.36
+version: 1.37_01

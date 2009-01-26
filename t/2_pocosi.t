@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 21;
+use Test::More tests => 23;
 BEGIN { use_ok('POE::Component::Server::IRC') };
 BEGIN { use_ok('POE::Component::IRC') };
 BEGIN { use_ok('POE') };
@@ -61,8 +61,10 @@ sub _shutdown {
 sub ircd_registered {
   my ($heap,$object) = @_[HEAP,ARG0];
   my $backend = $_[SENDER]->get_heap();
-  isa_ok( $object, "POE::Component::Server::IRC" );
-  isa_ok( $backend, "POE::Component::Server::IRC" );
+  isa_ok( $object, 'POE::Component::Pluggable' );
+  isa_ok( $object, 'POE::Component::Server::IRC' );
+  isa_ok( $backend, 'POE::Component::Server::IRC' );
+  isa_ok( $backend->pipeline, 'POE::Component::Pluggable::Pipeline');
   undef;
 }
 
