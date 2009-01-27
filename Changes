@@ -1,6 +1,13 @@
-==============================
-9999-99-99 99:99:99 (untagged)
-==============================
+========================
+2009-01-27 13:21:14 1.38
+========================
+
+  2009-01-27 13:20:12 (r167) by bingos
+  t/ts_13_nickrace.t A; MANIFEST M; Changes M;
+  lib/POE/Component/Server/IRC.pm M
+
+    Fixed a race condition where two connecting clients could obtain the
+    same nickname
 
   2009-01-26 13:17:36 (r166) by bingos
   t/2_pocosi.t M; lib/POE/Component/Server/IRC.pm M
