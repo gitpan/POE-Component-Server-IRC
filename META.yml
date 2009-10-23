@@ -3,9 +3,12 @@ abstract: 'A fully event-driven networkable IRC server daemon module'
 author:
   - 'Chris Williams <chris@bingosnet.co.uk>'
 build_requires:
+  ExtUtils::MakeMaker: 6.42
   Test::More: 0.47
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.78'
+generated_by: 'Module::Install version 0.91'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,6 +20,28 @@ no_index:
     - inc
     - t
     - xt
+provides:
+  POE::Component::Server::IRC:
+    file: lib/POE/Component/Server/IRC.pm
+    version: 1.40
+  POE::Component::Server::IRC::Backend:
+    file: lib/POE/Component/Server/IRC/Backend.pm
+    version: 1.40
+  POE::Component::Server::IRC::Common:
+    file: lib/POE/Component/Server/IRC/Common.pm
+    version: 1.40
+  POE::Component::Server::IRC::OperServ:
+    file: lib/POE/Component/Server/IRC/OperServ.pm
+    version: 1.40
+  POE::Component::Server::IRC::Pipeline:
+    file: lib/POE/Component/Server/IRC/Pipeline.pm
+    version: 1.40
+  POE::Component::Server::IRC::Plugin:
+    file: lib/POE/Component/Server/IRC/Plugin.pm
+    version: 1.40
+  POE::Component::Server::IRC::Test::Plugin:
+    file: lib/POE/Component/Server/IRC/Test/Plugin.pm
+    version: 1.40
 requires:
   Algorithm::Diff: 1.19
   Carp: 0
@@ -36,5 +61,7 @@ requires:
   Socket: 0
   perl: 5.6.0
 resources:
+  homepage: http://github.com/bingos/poe-component-server-irc/tree
   license: http://dev.perl.org/licenses/
-version: 1.38
+  repository: git://github.com/bingos/poe-component-server-irc.git
+version: 1.40
