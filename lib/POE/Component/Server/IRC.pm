@@ -5,6 +5,12 @@
 # distribution for details.
 #
 package POE::Component::Server::IRC;
+BEGIN {
+  $POE::Component::Server::IRC::AUTHORITY = 'cpan:BINGOS';
+}
+BEGIN {
+  $POE::Component::Server::IRC::VERSION = '1.41';
+}
 
 use strict;
 use warnings;
@@ -13,10 +19,6 @@ use POE;
 use POE::Component::Server::IRC::Common qw(:ALL);
 use POE::Component::Server::IRC::Plugin qw(:ALL);
 use Date::Format;
-use vars qw($VERSION $REVISION);
-
-$VERSION = '1.40';
-($REVISION) = (q$LastChangedRevision$=~/(\d+)/g);
 
 sub spawn {
   my $package = shift;
@@ -38,6 +40,7 @@ sub _load_our_plugins {
 
 sub IRCD_connection {
   my ($self,$ircd) = splice @_,0 ,2;
+  pop @_;
   my ($conn_id,$peeraddr,$peerport,$sockaddr,$sockport) = map { ${ $_ } } @_;
 
   delete $self->{state}->{conns}->{ $conn_id } if $self->_connection_exists( $conn_id );
@@ -51,6 +54,7 @@ sub IRCD_connection {
 
 sub IRCD_connected {
   my ($self,$ircd) = splice @_,0 ,2;
+  pop @_;
   my ($conn_id,$peeraddr,$peerport,$sockaddr,$sockport,$name) = map { ${ $_ } } @_;
 
   delete $self->{state}->{conns}->{ $conn_id } if $self->_connection_exists( $conn_id );
@@ -66,6 +70,7 @@ sub IRCD_connected {
 
 sub IRCD_connection_flood {
   my ($self,$ircd) = splice @_,0 ,2;
+  pop @_;
   my ($conn_id) = map { ${ $_ } } @_;
   $self->_terminate_conn_error( $conn_id, 'Excess Flood' );
   return PCSI_EAT_ALL;
@@ -73,6 +78,7 @@ sub IRCD_connection_flood {
 
 sub IRCD_connection_idle {
   my ($self,$ircd) = splice @_,0 ,2;
+  pop @_;
   my ($conn_id,$interval) = map { ${ $_ } } @_;
   return PCSI_EAT_NONE unless $self->_connection_exists( $conn_id );
   my $conn = $self->{state}->{conns}->{ $conn_id };
@@ -92,6 +98,7 @@ sub IRCD_connection_idle {
 
 sub IRCD_auth_done {
   my ($self,$ircd) = splice @_,0 ,2;
+  pop @_;
   my ($conn_id,$ref) = map { ${ $_ } } @_;
   return PCSI_EAT_ALL unless $self->_connection_exists( $conn_id );
   $self->{state}->{conns}->{ $conn_id }->{auth} = $ref;
@@ -101,6 +108,7 @@ sub IRCD_auth_done {
 
 sub IRCD_disconnected {
   my ($self,$ircd) = splice @_,0 ,2;
+  pop @_;
   my ($conn_id,$errstr) = map { ${ $_ } } @_;
   return PCSI_EAT_ALL unless $self->_connection_exists( $conn_id );
 
@@ -126,6 +134,7 @@ sub IRCD_disconnected {
 
 sub IRCD_compressed_conn {
   my ($self,$ircd) = splice @_,0 ,2;
+  pop @_;
   my ($conn_id) = map { ${ $_ } } @_;
   $self->_state_send_burst( $conn_id );
   return PCSI_EAT_ALL;
@@ -134,6 +143,7 @@ sub IRCD_compressed_conn {
 sub _default {
   my ($self,$ircd,$event) = splice @_, 0, 3;
   return PCSI_EAT_NONE unless $event =~ /^IRCD_cmd_/;
+  pop @_;
   my ($conn_id,$input) = map { ${ $_ } } @_;
 
   return PCSI_EAT_ALL unless $self->_connection_exists( $conn_id );
@@ -4633,6 +4643,11 @@ sub configure {
   }
 
   $self->{config}->{ uc $_ } = $options->{ $_ } for keys %{ $options };
+  my $v;
+  {
+    no strict 'vars';
+    $v = defined $VERSION ? $VERSION : 'dev-git';
+  }
 
   $self->{config}->{CREATED} = time();
   $self->{config}->{CASEMAPPING} = 'rfc1459';
@@ -4640,7 +4655,7 @@ sub configure {
   $self->{config}->{SERVERNAME} =~ s/[^a-zA-Z0-9\-.]//g;
   $self->{config}->{SERVERNAME} .= '.' unless $self->{config}->{SERVERNAME} =~ /\./;
   $self->{config}->{SERVERDESC} = 'Poco? POCO? POCO!' unless $self->{config}->{SERVERDESC};
-  $self->{config}->{VERSION} = ref ( $self ) . '-' . $VERSION unless $self->{config}->{VERSION};
+  $self->{config}->{VERSION} = ref ( $self ) . '-' . $v unless $self->{config}->{VERSION};
   $self->{config}->{NETWORK} = 'poconet' unless $self->{config}->{NETWORK};
   $self->{config}->{HOSTLEN} = 63 unless ( defined ( $self->{config}->{HOSTLEN} ) and $self->{config}->{HOSTLEN} > 63 );
   $self->{config}->{NICKLEN} = 9 unless ( defined ( $self->{config}->{NICKLEN} ) and $self->{config}->{NICKLEN} > 9 );

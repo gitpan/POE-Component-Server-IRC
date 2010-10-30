@@ -1,4 +1,10 @@
 package POE::Component::Server::IRC::Backend;
+BEGIN {
+  $POE::Component::Server::IRC::Backend::AUTHORITY = 'cpan:BINGOS';
+}
+BEGIN {
+  $POE::Component::Server::IRC::Backend::VERSION = '1.41';
+}
 
 use strict;
 use warnings;
@@ -7,10 +13,7 @@ use POE::Component::Server::IRC::Plugin qw( :ALL );
 use Socket;
 use Carp;
 use Net::Netmask;
-use base qw(POE::Component::Pluggable);
-use vars qw($VERSION);
-
-$VERSION = '1.40';
+use base qw(Object::Pluggable);
 
 sub create {
   my $package = shift;
@@ -216,7 +219,7 @@ sub __send_event {
 
 sub _send_event {
   my ($self,$event,@args) = @_;
-  return 1 if $self->_pluggable_process( 'SERVER', $event, \( @args ) ) == PCSI_EAT_ALL;
+  return 1 if $self->_pluggable_process( 'SERVER', $event, \@args ) == PCSI_EAT_ALL;
   $poe_kernel->post( $_ => $event, @args ) for  keys % { $self->{sessions} };
   return 1;
 }
@@ -1214,7 +1217,7 @@ These are plugin related methods:
 
 =item C<pipeline>
 
-Returns the L<POE::Component::Server::IRC::Pipeline> object used internally by the component.
+Returns the L<Object::Pluggable::Pipeline> object used internally by the component.
 
 =item C<plugin_add>
 

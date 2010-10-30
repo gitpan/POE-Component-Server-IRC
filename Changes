@@ -1,1057 +1,185 @@
-==============================
-2009-10-23 16:03:38 +0100 1.40
-==============================
-
-  commit 9622daaa6516b6113001f44266a454cf0a82854e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Oct 23 16:03:38 2009 +0100
-  
-    Bumped and sorted all the version numbers
-
-  commit 8b4ac1889c27c92d6e5116ac09e7f07a0a5d2ee1
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Oct 23 15:58:30 2009 +0100
-  
-    Updated Makefile.PL with newer Module::Install directives
-
-  commit 671ae7ca83637977d92fd8d400843cdf4578fd4e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Oct 23 15:50:25 2009 +0100
-  
-    Updated Changelog generator to git version by Rocco Caputo
-
-  commit 63cb40d5991854efa0831f0c95e443519b348ddf
-  Author: Hinrik Örn Sigurðsson <hinrik.sig@gmail.com>
-  Date:   Sun Oct 18 03:29:57 2009 +0000
-  
-    Add a .gitignore
-
-  commit 723dc719592f0d58fd669eea23d509b471e4f683
-  Author: Hinrik Örn Sigurðsson <hinrik.sig@gmail.com>
-  Date:   Sun Oct 18 03:22:25 2009 +0000
-  
-    Don't send NICK messages more than once when we're in channels
-
-    The server was updating its state, then checking for channel members
-    who needed to be informed of the nick change. This was causing users
-    to get more than one NICK message back whenever they change nicks.
-
-    I moved the state-updating part further down, to prevent this. I also
-    added a test for this.
-
-  commit ab47ed926b89878a7fedf7b5dba65f3ba75a222c
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Apr 21 15:40:42 2009 +0100
-  
-    Pod tidying exercise
-
-  commit f79e08233c1b1d0dd4a56c4b9f6fda75cd17d276
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Mar 10 23:23:35 2009 +0000
-  
-    Started first phase of POD tidying 
-
-==============================
-2009-01-27 13:21:14 +0000 1.38
-==============================
-
-  commit a9ea3f6b4c32bed70f533381889737822174534e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jan 27 13:20:12 2009 +0000
-  
-    Fixed a race condition where two connecting clients could obtain the
-    same nickname
-
-  commit 557d5bde90f1a966f735964e941df51d920f0e03
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jan 26 13:17:36 2009 +0000
-  
-    Fixed up and tested. We are now using PoCo-Pluggable for plugin stuff
-
-  commit 4b17b81a73cab4d71bed8fd0b4e4e7bb0ec13879
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jan 26 12:57:04 2009 +0000
-  
-    First stage of porting to use PoCo-Pluggable 
-
-==============================
-2009-01-24 22:13:54 +0000 1.36
-==============================
-
-  commit c734e08d40a594eaa562d83a634ddc0f0ca0e5f1
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Jan 24 22:04:19 2009 +0000
-  
-    Fixed RT#42760 reported by Hinrik
-
-  commit f826f6dc336e020c4b88157c7cb9074c87c7c10c
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Oct 1 12:10:37 2008 +0000
-  
-    Updated MANIFEST
-
-  commit c7413295127bd040550d0f0b27726e0f40e14fa4
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Oct 1 11:46:33 2008 +0000
-  
-    Added the LICENSE file 
-
-==============================
-2008-10-01 11:46:50 +0000 1.34
-==============================
-
-  commit 9c7a89edc1087d4efddbad5944c169793b345d8d
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Oct 1 11:46:50 2008 +0000
-  
-    CPAN Release 1.34
-
-  commit db9753f3570ac92a90599ad870eb032e3de07e4b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Oct 1 11:35:10 2008 +0000
-  
-    Fix and regression test for RT #39701 reported by Hinrik
-
-  commit 1cee65b7c8c53821bd2b1ffdbd6226b014477322
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri May 9 14:15:24 2008 +0000
-  
-    Moved to full M::I Makefile.PL 
-
-==============================
-2008-05-09 13:47:35 +0000 1.32
-==============================
-
-  commit 689b79be6d5a984dfac735a96cf4fed5711a6074
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri May 9 13:46:16 2008 +0000
-  
-    Fixed some distribution problems
-
-  commit 78931c3dcaa8f285df4d5f3c8ad9e04fa5dc297a
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri May 9 13:35:34 2008 +0000
-  
-    Updated and added LICENSE information
-
-  commit eee3ff07a9e202728765c020de85138cb90c556b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri May 9 13:17:49 2008 +0000
-  
-    Removed MANIFEST.SKIP
-
-  commit 5121fdc7c7c60cbb994094bd311ab007a39f1c57
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Mar 14 14:10:39 2008 +0000
-  
-    Moving author tests to xt/, updated prereqs list, indentation tidy to
-    OperServ.pm
-
-  commit 373dc1707c7473fca9a0f3419030db66cbd2cb09
-  Author: Arnaldo Guzman <arnaldo@eggzeck.org>
-  Date:   Wed Mar 12 23:34:13 2008 +0000
-  
-    Added some upgrades
-
-  commit 539a5db5fce3a13ce601235290cd641c4eb1f00f
-  Author: Arnaldo Guzman <arnaldo@eggzeck.org>
-  Date:   Wed Mar 12 23:30:09 2008 +0000
-  
-    Changed version variable to 1.33 
-
-==============================
-2008-03-11 12:32:17 +0000 1.30
-==============================
-
-  commit 8fadc39badf0d65baa135bc36f53744a9101b7a1
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Mar 11 12:30:24 2008 +0000
-  
-    Applied a patch to OperServ from eggzeck for enhancements. 
-
-==============================
-2008-02-20 16:39:30 +0000 1.28
-==============================
-
-  commit 93a89bf2a3f670bd66e0ef1821bdb4068a64bd91
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Feb 20 16:37:48 2008 +0000
-  
-    Added pmkpasswd utility
-
-  commit c04b471e27e4cd2ecff6305f47f9f83c26cc392b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Feb 16 13:50:23 2008 +0000
-  
-    Forgot to add prereq for Crypt::PasswdMD5 
-
-==============================
-2008-02-16 13:50:36 +0000 1.26
-==============================
-
-  commit 8231d434f9509a993cc92b01da4357a3993fa551
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Feb 16 13:50:36 2008 +0000
-  
-    CPAN Release 1.26
-
-  commit 04456214072c71678c61f08c8ead9b368a3079d0
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Feb 16 13:13:57 2008 +0000
-  
-    Added crypt/md5 encryption for OPER passwords. New funcs in ::Common,
-    mkpasswd and chkpasswd. Updated common test. Thanks to nanonyme for
-    the suggestion. 
-
-==============================
-2007-11-01 14:00:41 +0000 1.24
-==============================
-
-  commit 1105bc6101cd26043013da2a4e19d7e97a8a7115
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Nov 1 14:00:16 2007 +0000
-  
-    Update Module::Install to 0.68 
-
-==============================
-2007-09-23 10:13:14 +0000 1.22
-==============================
-
-  commit 1970726d485a70c4197c42edf356e947aa59b69f
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Sep 23 10:08:18 2007 +0000
-  
-    Added config option to enable oper only RPL_WHOISACTUALLY as
-    suggested by Kaitlyn Parkhurst 
-
-==============================
-2007-09-20 17:56:26 +0000 1.20
-==============================
-
-  commit b8889f0922347e07c2d8ed633489434baf192405
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Sep 20 17:55:48 2007 +0000
-  
-    Updated versions on all .pm files prior to CPAN Release
-
-  commit 51d732c9aaea89624c7304cf6097732f8c29c1bf
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Sep 17 16:11:54 2007 +0000
-  
-    Really unset the executable property on Makefile.PL this time. D'oh
-
-  commit e90b0bc9a3cd3fcfea8d7d011a7aa1b812ba83f2
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Sep 17 16:05:30 2007 +0000
-  
-    Updated some of the prereqs in Makefile.PL
-
-  commit b3a1e40e5677396121dbc623ca5df620f352de3a
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Sep 17 15:58:55 2007 +0000
-  
-    Removed executable property from Makefile.PL 
-
-==============================
-2007-08-25 18:01:14 +0000 1.18
-==============================
-
-  commit 5f8d85ce9fd446a2b99fde4c064a4e5ccf1bd40d
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Aug 25 18:00:48 2007 +0000
-  
-    Applied a patch from lunartear to fix PONG responses 
-
-==============================
-2007-08-23 16:16:45 +0000 1.16
-==============================
-
-  commit 4b7625040a46572114ca5be8293fcad8935c0a76
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Aug 23 16:16:21 2007 +0000
-  
-    add_listener() was using BindAddr instead of BindAddress when calling
-    SocketFactory. Spotted by lunartear 
-
-==============================
-2007-08-23 15:53:52 +0000 1.14
-==============================
-
-  commit 156eb9c42398dc5923224b06219957121767ec12
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Aug 23 15:50:05 2007 +0000
-  
-    Added 'ircd_listener_failure' output event.
-
-  commit 4febd0861c8c90ee2902eeea282591136134e75d
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jul 3 13:05:44 2007 +0000
-  
-    Updated the SSL certificate and key 
-
-==============================
-2007-06-29 10:28:37 +0000 1.12
-==============================
-
-  commit 828e2802bfdaa815c72b41e0e681bfd9bcf7f570
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Jun 29 10:26:25 2007 +0000
-  
-    Documentation fixes. Added state_(nicks|chans|peers) methods and
-    documented. 
-
-==============================
-2007-02-13 15:57:17 +0000 1.11
-==============================
-
-  commit 216a7abdffb0470df20b831d5018690875edff83
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Feb 13 15:56:55 2007 +0000
-  
-    Refactored the MagNET Oper hacks. Should all work as expected now. 
-
-==============================
-2007-02-13 11:53:44 +0000 1.10
-==============================
-
-  commit 45a91c195c40a450a3428ae7e984e2c928130af7
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Feb 13 11:53:10 2007 +0000
-  
-    Actually added the test, Test::Kwalitee. Doh.
-
-  commit ad5d671f831353844ac25db15f68331ed479ea2e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Feb 13 11:52:39 2007 +0000
-  
-    Added new test, Test::Kwalitee
-
-  commit 53c0dd12fcccd96f0a1429ab3fa211ee4871652e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Feb 13 11:51:10 2007 +0000
-  
-    Added MagNET Oper hacks. 
-
-==============================
-2007-01-29 14:52:17 +0000 1.09
-==============================
-
-  commit a86d28e8db9193fefdf38f5f24b0abc3b2799c99
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jan 29 14:50:57 2007 +0000
-  
-    Kwalitee fixes. 
-
-==============================
-2007-01-23 09:58:13 +0000 1.08
-==============================
-
-  commit 37828cd701d94a12155f830a1fb36cf5c748790d
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jan 23 09:57:14 2007 +0000
-  
-    Fixed a problem with the module on perl-5.6.1 
-
-==============================
-2006-12-29 11:09:49 +0000 1.07
-==============================
-
-  commit 6555147bfd79c44b25876dc3005c50df0a378efe
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Dec 29 11:08:09 2006 +0000
-  
-    PoCo-IRC TOPIC bug caused problems with topic test. Raised poco-irc
-    prereq to 5.18. 
-
-==============================
-2006-12-02 15:46:33 +0000 1.06
-==============================
-
-  commit 44de7dd24298e0418745993fdf48160f1aadcf87
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Dec 2 15:45:49 2006 +0000
-  
-    Automagic registration of parent sessions added, as per buu's
-    suggestion 
-
-==============================
-2006-11-19 14:29:24 +0000 1.05
-==============================
-
-  commit 57ea92058541022bc968ee98525b622209b7f0b3
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Nov 19 14:28:25 2006 +0000
-  
-    Fixed problem with LIST and topics. Fixed TOPIC command as well.
-    Added a test. Reported by eggzeck" 
-
-==============================
-2006-11-16 09:25:31 +0000 1.04
-==============================
-
-  commit 46cc5c74af8a8d4ffa8d41e4120581f0047a39de
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Nov 16 09:24:32 2006 +0000
-  
-    Made the compresslink test skip on *bsd systems, which currently have
-    issues that test.
-
-  commit 3f3eaf4b63e6660d9bbe94e03338b2c71bb82b74
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Nov 16 09:00:34 2006 +0000
-  
-    Problem with 472 numeric response fixed. Reported by eggzeck.
-
-  commit ba404995adaa0239e1e997af9fb5faaf5d03aa6f
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Nov 1 11:09:28 2006 +0000
-  
-    Documentation fix for ::Pipeline, spotted by Martijn van Beers. 
-
-==============================
-2006-10-26 12:14:17 +0000 1.03
-==============================
-
-  commit 6c31f810f366fef0fc512cc35526fcb005b14876
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Oct 26 12:13:32 2006 +0000
-  
-    Updated the tests for ::Common.
-
-  commit 60dd7fc71818bd57f47003bba87c0b99b0b7c168
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Oct 26 12:08:35 2006 +0000
-  
-    Ported parse_user() from PoCo-IRC-Common. Ported the new improved
-    shiny parse_mode_line() from the same source. 
-
-==============================
-2006-09-29 08:57:44 +0000 1.02
-==============================
-
-  commit 849d0d842f8873963b799b9a299ad3f7a66bef7e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Sep 29 08:57:17 2006 +0000
-  
-    Fixed RT #21769. Sppofed nicks now have a default ircname set.
-    Reported by David Serrano 
-
-==============================
-2006-09-27 10:12:39 +0000 1.01
-==============================
-
-  commit 3192b54b96219cb1f1cc20dbdd18093a9e88675b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Sep 27 10:11:06 2006 +0000
-  
-    Ensured all modules had 'use strict' 
-
-==============================
-2006-09-26 09:09:22 +0000 1.00
-==============================
-
-  commit 5d9bccc4a8a8dd41ed0195621128242f97aedfcd
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Sep 26 09:08:24 2006 +0000
-  
-    Removed Build.PL and bumped versions for release. 
-
-=================================
-2006-09-16 15:43:54 +0000 0.99_05
-=================================
-
-  commit c4b88a2ee93750a03d7f7a8ea039829cfbcb0e35
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Sep 16 15:38:53 2006 +0000
-  
-    Updated to use Module::Install 
-
-=================================
-2006-09-06 17:43:39 +0000 0.99_04
-=================================
-
-  commit 9c8cdd2c815b155172c58f85bb3587054c9f52b6
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Sep 6 17:43:07 2006 +0000
-  
-    Added documentation to OperServ and bumped the version numbers.
-
-  commit b20199ee819ae6f12191d49f4a20386612cedea4
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Sep 6 17:33:39 2006 +0000
-  
-    Added OperServ subclass once again. New and improved and shiny. With
-    a test. 
-
-=================================
-2006-09-03 17:16:55 +0000 0.99_03
-=================================
-
-  commit 4ee8de25d385c72d740770d9274706b25ac44def
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Sep 3 17:16:20 2006 +0000
-  
-    Updated Changes file
-
-  commit 3862a8c854bd2e5bbd17e8ba806bf217e49fb08e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Sep 3 17:04:05 2006 +0000
-  
-    Added pod and pod coverage tests. Fixed documentation accordingly.
-    Adapted svn-log.perl from POE.
-
-  commit f9d3e4f3300c5751e22bb15d275d4914f00f328a
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Aug 31 07:39:22 2006 +0000
-  
-    Commit so I can checkout to laptop. 
-
-=================================
-2006-08-28 18:01:25 +0000 0.99_02
-=================================
-
-  commit 139c4285d732aa11e866273daee7ab306c1fb4b6
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Aug 28 18:01:03 2006 +0000
-  
-    Bumped the version numbers, let's try again
-
-  commit f3e4d24556913e7389d403e4de4cff3ff7679c33
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Aug 28 17:59:46 2006 +0000
-  
-    Fucking test was smurfed, still had PoCo-Server-IRC-OperServ in the
-    simple test. Fucktard. 
-
-=================================
-2006-08-28 17:30:21 +0000 0.99_01
-=================================
-
-  commit ef0c27018cc16d5c0c35b515d7b60a2f2b2c2f4f
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Aug 28 17:23:02 2006 +0000
-  
-    added a README and bumped version number
-
-  commit f6194f429c83d543878e5647bb0aa81adf06b110
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Aug 28 16:52:51 2006 +0000
-  
-    Woohoo. CALLERID test added. We may be approaching a CPAN dev
-    release.
-
-  commit 496983800d5e4c5315d3b81e55fc03aaeb961b99
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Aug 27 17:11:24 2006 +0000
-  
-    Implemented CALLERID (+Gg).
-
-  commit f05e377507a54129880d11accc2c426efd0a978d
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Aug 23 09:22:48 2006 +0000
-  
-    Believe I have sorted out the SSL issues. Net::SSLeay is fucked on
-    dev box which might explain a lot of things.
-
-  commit f427798b93056267675d8c4fd0727b0ec523a512
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Aug 18 15:45:52 2006 +0000
-  
-    Added ACCEPT command as related to CALLERID.
-
-  commit aee04027da6ad985d543ad6dc0b2c2c30584d9b8
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Aug 15 18:39:45 2006 +0000
-  
-    Some minor bug fixes.
-
-  commit 4893b39ab6e4eff587eba6588a9348ddbf01179b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Aug 8 18:59:04 2006 +0000
-  
-    Fucked if I can remember every change; Implemented +D umode which is
-    channel deafness, ho-hum.
-
-  commit b50184bc8c53c7fa2faa29564c08a7eafb537701
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Aug 4 13:59:58 2006 +0000
-  
-    Ziplinks working for POE::Component::Server::IRC based ircds only.
-    Pesky hybrid.
-
-  commit ed91410dafd9500333f70565d46299ca45745a50
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jul 27 18:49:55 2006 +0000
-  
-    Finally got ziplinks working. POE::Filter::Zlib was the tosser
-    causing the trouble. Ziplinks will probably only work betweenst PCSI
-    ircd's though for the moment.
-
-  commit aa99d9deb58af1fe9daf68a58b6f5e8f21821972
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jul 25 11:13:35 2006 +0000
-  
-    Changes to UMODE code; Implemented LOCOPS, WALLOPS and OPERWALL
-    commands for client/peer; Added WALLOPS server API command;
-
-  commit bd5c76503892ede5ab38001bb6240f2e9e72a71c
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Jul 21 14:31:43 2006 +0000
-  
-    Reimplemented PRIVMSG/NOTICE handling for both client and peer. Now
-    supports exactly the same syntax as Hybrid.
-
-  commit 80cd54b5e82dac716ee009e7897a58ef6da1522d
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Jul 19 12:12:06 2006 +0000
-  
-    Added documentation for daemon_cmd_privmsg|notice input events.
-
-  commit 343206a58f36ed84d5c8be3f1dd7cdc64ee07ac8
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jul 18 10:49:40 2006 +0000
-  
-    Fixed SQUIT, it was working fine for a leaf-node, but not as a hub.
-
-  commit e49d23014543aec18950a1deaef0196d88591f05
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jul 13 17:19:03 2006 +0000
-  
-    Fixed a bug in SJOIN code. Tested using 60 flood bots. Favourable
-    results.
-
-  commit 9ae1876d0f1ac365b721e55b9a2e2845e577fda2
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jul 13 16:13:47 2006 +0000
-  
-    Implemented MODES, the maximum number of non-simple chanmodes that
-    can be applied in one go. Numerous tweaks and fixes. Still haven't
-    got to the bottom of the chan desyncs with half-ops.
-
-  commit b439a6d9ee014f04921def69bbfb6f7fdb13aeb6
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jul 10 13:07:05 2006 +0000
-  
-    Implemented spoofed SJOIN command, so spoofed nicks can reset
-    channels. All applicable commands should multiline if output lines >
-    510 chars now. Makefile.PL will detect previous poco-server-irc
-    installs and warn of API changes.
-
-  commit 84d889c5fc5124b332a65a511fb5c5e4fa8ea92e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jul 6 16:27:36 2006 +0000
-  
-    Numerous changes. Documentation completed.
-
-  commit 57b30339039558d11f9d91b776cfa7b048cb174f
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Jun 30 16:57:48 2006 +0000
-  
-    Documented all output events, nearly all input events and all
-    methods.
-
-  commit 5c5f66524ba9787e65f76f37a9c65b7074548f6f
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Jun 30 11:20:10 2006 +0000
-  
-    Implemented RKLINE ( Regex KLINEs ) peer and oper commands.
-
-  commit bd67772614c848b211a748cddd4c58a4be3f8b25
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jun 29 17:35:57 2006 +0000
-  
-    GLINE, KLINE and UNKLINE peer and oper commands implemented. Woohoo!
-    Just RKLINE to do.
-
-  commit 5433420675f17834f9301dc5a78a322b6e143906
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jun 27 17:14:50 2006 +0000
-  
-    Slight fix to one of the tests. Added GLINE and KLINE support \o/.
-    Only peer source KLINEs for the moment. RKLINE to do.
-
-  commit 44fd837d3f62f0130baee54efe00a2a818382d0d
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Jun 9 15:59:06 2006 +0000
-  
-    Implemented GLINE commands. TODO: ban users connecting based on the
-    glines
-
-  commit 019c8260a2a5c7b1604a22e5f7f10167d4b4174a
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jun 8 18:24:49 2006 +0000
-  
-    Refactored INVITE code and added handler for peer INVITE messages
-
-  commit 40ab6a018cd9865a7a62bb60942f77ef9c4b4e19
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Jun 2 16:57:52 2006 +0000
-  
-    Spotted a bug with INFO command. Fixed
-
-  commit 064cfff05374f803373343e56fb45e8687734567
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Jun 2 16:39:17 2006 +0000
-  
-    More documentation, including SYNOPSIS. New tests for oper and spoofs
-    functionality.
-
-  commit f3e1022e065ee9907e96860cad542dd5557f2b9a
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 31 18:29:09 2006 +0000
-  
-    Cleaned up the test-harness script
-
-  commit bbed0382c84c2a1dc545790d84f7a7b1a6983312
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 31 18:23:54 2006 +0000
-  
-    RPL_WHOISCHANNELS automagically splits on long lines now
-
-  commit 22875f75cf65f136810df2b00947673c041208d7
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 31 17:31:19 2006 +0000
-  
-    We now generate multiple RPL_NAMES if the line length exceeds 510
-    characters.
-
-  commit df6971361a180715339d9fc14e07a5b3f5660147
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 31 15:03:07 2006 +0000
-  
-    More documentation updates
-
-  commit 5933f52b286d7d26bb52c83d177d3b32a2cd5245
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 31 13:35:24 2006 +0000
-  
-    Set the SSLify tests to skip. Pesky fucking thing is defying all
-    efforts at debuggering
-
-  commit 3643218ca4b743fac6dd283738cd86cf60597b64
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 31 13:26:35 2006 +0000
-  
-    Fixed serverlink test script
-
-  commit b41254221bfa261321c4ae7f5f4235d2584c5ef7
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 31 13:07:15 2006 +0000
-  
-    Added test script for SSLify with associated key/cert combo
-
-  commit 954c1e003d73f5d94300a2996f7ddaf8e2fa9d19
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 31 10:59:41 2006 +0000
-  
-    Added more tests. Debugged spoofed nicks being killed. Documentation
-    updates.
-
-  commit 1a507b743742092648609a486191cc6e7d452b34
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri May 26 08:51:01 2006 +0000
-  
-    Various fixes to ircd and Backend module. Documentation updates.
-    Started to add more comprehensive tests.
-
-  commit daba5fbfbe2519878c7f40029cb2b3dd3f69f9d7
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed May 17 19:15:34 2006 +0000
-  
-    Various improvements. Tweaks to s-2-s handling. Implemented STATS
-    command. Documentation underway.
-
-  commit d2f58e4228c6b7c4ff0aeadd07e0c2fd7229e861
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat May 13 10:42:33 2006 +0000
-  
-    Bug fix to ::Common.pm, more improvements to Services API. Tweaks for
-    server-to-server linking.
-
-  commit 87e6f46092b248b977ca52c36cc9aa506cb183c3
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue May 9 19:06:31 2006 +0000
-  
-    All Services API hooks (hopefully) in place.
-
-  commit cf5ac5330ed9cd547094558a292ea2ce5564bd91
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon May 8 16:36:04 2006 +0000
-  
-    Services API is finally on the go. Hooks are in place to generate
-    ircd_daemon_* events for a lot of irc events. Spoofed nicks are
-    working. And it should all still work with plugins. Yay!
-
-  commit 2f49ef4a46503610b1dae5bd566dbcc7a286b2e9
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri May 5 17:11:53 2006 +0000
-  
-    Tweaked REMOVE command to behave properly when a comment is
-    specified.
-
-  commit a6307b7e618d15e04c386e7eca0d1c5ca85f9c93
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu May 4 22:40:19 2006 +0000
-  
-    Added API command for REMOVE.
-
-  commit 5c94dae788a505018babb7727a71bc12152d5cef
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu May 4 15:55:42 2006 +0000
-  
-    Added REMOVE command a la Freenode hyperion, which is a forced PART.
-
-  commit 7ef5dd096245443494676dd1c74287a21eed6ca1
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu May 4 13:39:42 2006 +0000
-  
-    Backend changes to _plugin_process so that it operates in a similar
-    way to PoCo-IRC. Daemon code has been moved to IRC.pm and Daemon
-    removed.
-
-  commit 12f2d2ac84b1b82670f89cd08a10f3756cf9509b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Apr 24 10:06:21 2006 +0000
-  
-    Ported fixes and amendments from PoCo-IRC to Pipeline and Backend.
-
-  commit f99d70861d152b39a2817129feced422e5c14f8c
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Mar 26 09:35:51 2006 +0000
-  
-    Server to Server protocol hopefully all debugged. Tested against
-    hybrid network. \o/
-
-  commit 77f74c17f78b1babadc6eb26e6eb3e3dfbe60d3b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jan 24 21:34:12 2006 +0000
-  
-    Daemon is almost complete. I-Line work to be done and the eagerly
-    awaited services/spoofed client API.
-
-  commit d4dbdfc982b422ecbf25718775688a7e65675706
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Jan 22 19:00:12 2006 +0000
-  
-    A whole hatfull of changes. Server to server code written and
-    debugged against Hybrid-7.0 \o/ Seems to work. Still lot's to do.
-
-  commit 43bcdeb1fc750780bb9aab673da193d9e326a49e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jan 10 22:09:04 2006 +0000
-  
-    Check in so I can edit on meh laptop whilst away from $home
-
-  commit d7d46db16ab0bf18a70f2968974c31b50b05f42e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Jan 8 14:02:52 2006 +0000
-  
-    Hopefully set the svn:keyword properly.
-
-  commit 26e1aaf5c4d1c847e97589e88a9c69a3acb0c82c
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Jan 7 17:44:42 2006 +0000
-  
-    Backend: Pipeline ported from PoCo-IRC; Changes to send_output to
-    enable better thruput; Daemon: near as damnit complete standalone
-    code; Server-to-server code embryonic; Service/Spoofed client
-    interface stalled. Reasonably stable after load/stress testing.
-
-  commit 8b734935a26e3c86b9d2ff71982af9a988c280a2
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Dec 22 18:06:32 2005 +0000
-  
-    Minor bug fixes in ::Backend; Implemented OPER,KILL and started work
-    on peer-2-peer code in ::Daemon.
-
-  commit c72bfa998b2bb2f2a98e82a74c3b04ac64ccb4d4
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Dec 17 16:43:52 2005 +0000
-  
-    Added simpleclient.pl for testing purposes. Backend: now has
-    connection idle tracking. Daemon: implemented nearly all IRC client
-    commands, ( lacking STATS, LINKS, CONNECT, OPER, KILL, etc. ),
-    extended 2_pocosi.t to suit.
-
-  commit a905d0e88b9a365db603e34d76c77be8d1d646d4
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Dec 9 18:15:59 2005 +0000
-  
-    Common funcs moved to separate module. Few minor fixes to Backend
-    related to client disconnection. Daemon: major works in progress.
-    Implementing state and client command parsing. Peer routing is pretty
-    much in the bag. Just need peering to work now >;]
-
-  commit 47c074901e6403fb9795513862f07e1bd5c5611b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Dec 5 13:25:34 2005 +0000
-  
-    Finished documenting Backend.pm
-
-  commit dfff21abe22242700d9f226ea1e61c57b2456972
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sun Dec 4 17:51:45 2005 +0000
-  
-    Documentation nearly finished in Backend.pm. Amendment to backend
-    test case.
-
-  commit baa14af505594cbe7b2d5310e7281d8aec5dd34e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Fri Nov 4 18:37:09 2005 +0000
-  
-    Documentation updates to Backend.pm. The API is almost nailed down.
-
-  commit 6740e5a74a3f661daae2654710969408c7b72d78
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Oct 26 14:34:19 2005 +0000
-  
-    A number of minor twiddles. A least the tests all pass.
-
-  commit 78eb5bca493c7017bf03de76c6112ae72d4417e8
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jul 7 20:12:12 2005 +0000
-  
-    Partially documented Backend.pm. Made some more hacks to Daemon.pm
-    fleshing out the start of message routing.
-
-  commit a0984cb815c8f013a91b38cef279f63859f55f29
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jun 23 16:05:49 2005 +0000
-  
-    Fixed a bug in the auth system by switching to using Ident::Agent.
-
-  commit ce4361fe6ae4fdc97174d7efccebe874c231ef22
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jun 23 14:50:40 2005 +0000
-  
-    Added compressed links using POE::Filter::Zlib to ::Backend.
-
-  commit 10d1e55d4a0fd7ff9e7bbe9261ba7fbfed040ccb
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Jun 18 15:25:45 2005 +0000
-  
-    Started implementing state using AnyData in Daemon.pm. Added
-    examples/test-harness.pl the code i'm using to test with.
-
-  commit 2d4de0357f5820384eabe545ee9888dd3efa17de
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Jun 15 14:56:19 2005 +0000
-  
-    Updated the documentation in Plugin.pm, removed references to USER
-    events as they aren't applicable.
-
-  commit 304240701b8bc54487cbce28ac7dc244d87e3477
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Jun 15 14:42:48 2005 +0000
-  
-    Additions to Backend to add plugin _load and _unload methods. Makes
-    it easier for subclasses to manage their own plugins.
-
-  commit 88bc4333c7831e44a938203a4631dcfade2832ea
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Jun 15 14:07:23 2005 +0000
-  
-    With a tweak, tweak, here and a tweak, tweak, there.
-
-  commit 6d436ddef5afa71f1b631868aa3b5cc525d4c61b
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Jun 15 10:36:04 2005 +0000
-  
-    More tweaking of ::Backend :D IRC events sent by the Backend are now
-    distinguished by 'ircd_backend_cmd_' prefix.
-
-  commit b1805d5f57f32c7e628cc24160351f1c0558d397
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Wed Jun 15 08:19:58 2005 +0000
-  
-    IRC.pm is now a subclass of Backend. Added Daemon.pm plugin which
-    will become the main state engine.
-
-  commit 58e9f6482e5c9bc45622a9ee0f7cd8fb5798755e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jun 14 20:50:52 2005 +0000
-  
-    Dramatic changes! Improved Backend and associated testsuite. IRC.pm
-    is no where done.
-
-  commit 3bf637416ca6e0b53c439b104ed37036c6b38cf5
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jun 14 09:59:46 2005 +0000
-  
-    Added testcase for plugin subsystem.
-
-  commit f205314e3a330cfe1be8e460fc91d51a2636cfb0
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Tue Jun 14 08:29:04 2005 +0000
-  
-    Added testcase for ::Backend 3.t
-
-  commit c60769843276395ad3289a19cd38c07ff3c06d90
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jun 13 22:44:11 2005 +0000
-  
-    Finally got ::Backend working and firing off events. Plugin system
-    needs testing.
-
-  commit b61830bf7c0687780cf4e47e1ccafe33425da9c1
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jun 13 19:04:50 2005 +0000
-  
-    Implemented most of ::Backend. Need runtime testcase writing.
-
-  commit c7f3d5c988bd3c734fa7416c3a7a96e26b6b9309
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Sat Jun 11 08:20:41 2005 +0000
-  
-    Added Backend.pm the beginnings of the new improved
-    PoCo-Server-IRC[tm]
-
-  commit 66905a1816b72789b6b8f3cf49187e76e42e05d7
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Jun 9 22:59:45 2005 +0000
-  
-    Tidied up the distribution, moved .pm files to lib/ structure. 
-
-=============================
-2005-08-25 14:06:01 +0000 0.3
-=============================
-
-  commit a97085cab31a7478c65fa1ad38b1c7d4ba5d710a
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Aug 25 14:06:01 2005 +0000
-  
-    Amended POD to link the ThreatNet web site.
-
-  commit 26b3153a8f9c9e8e730597e7975604f14bf0bdd1
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Thu Aug 25 14:02:48 2005 +0000
-  
-    Added use strict and caught and fixed a lot of typos/scoping
-    problems. 
-
-==============================
-2005-06-20 09:50:14 +0000 0.02
-==============================
-
-  commit 8a85f92b58fb37cf034ac2e53d060e6ee1e98e02
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jun 20 09:50:14 2005 +0000
-  
-    Updated MANIFEST and added MANIFEST.SKIP
-
-  commit 0dd44b6f033da1fdc755bdf62ae4edac8aaf509e
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jun 20 09:43:42 2005 +0000
-  
-    Fully documented IRC and IRC-OperServ. Added README and updated
-    module dependencies in Makefile.PL
-
-  commit 6c17293cbb9239a179bafe1313f24b5c3f5ba25d
-  Author: Chris Williams <chris@bingosnet.co.uk>
-  Date:   Mon Jun 20 09:17:56 2005 +0000
-  
-    Updated the documentation, prior to CPAN release :o 
-
-==============
-End of Excerpt
-==============
+Revision history for POE-Component-Server-IRC
+
+1.41  Sat Oct 30 22:25:55 GMT 2010
+    - Converted the Changes file to something human-writable (and more
+      human-readable)
+    - Removed the unused Pipeline.pm file
+    - Migrate distribution to Dist::Zilla
+    - Use Object::Pluggable instead of POE::Component::Pluggable
+    - Changed POE::Component::IRC to a test (instead of runtime) dependency
+    - Added some documentation to the distribution about the IRC server
+      protocols we implement
+    - The compress link test was getting skipped unconditionally. Fixed.
+    - The SSL test was not getting run. Enabled it.
+    - Remove POE::Component::Server::IRC::Test::Plugin and the associated
+      4_test_plugin.t test. That sort of testing is covered by
+      Object::Pluggable's test suite.
+
+1.40  Fri Oct 23 16:03:38 CET 2009
+    - Don't send NICK messages more than once when we're in channels
+    - Updated Makefile.PL with newer Module::Install directives
+
+1.38  Tue Jan 27 13:21:14 GMT 2009
+    - We are now using PoCo-Pluggable for plugin stuff
+    - Fixed a race condition where two connecting clients could obtain the
+      same nickname
+
+1.36  Sat Jan 24 22:13:54 GMT 2009
+    - Fixed RT#42760 reported by Hinrik
+    - Added the LICENSE file
+
+1.34  Wed Oct 1 11:46:50 GMT 2008
+    - Moved to full M::I Makefile.PL
+    - Fix and regression test for RT #39701 reported by Hinrik
+
+1.32  FriMay 9 13:47:35 GMT 2008
+    - Moving author tests to xt/, updated prereqs list, indentation tidy to
+      OperServ.pm
+    - Removed MANIFEST.SKIP
+    - Updated and added LICENSE information
+    - Fixed some distribution problems
+
+1.30  Tue Mar 11 12:32:17 GMT 2008
+    - Applied a patch to OperServ from eggzeck for enhancements.
+
+1.28  Wed Feb 20 16:39:30 GMT 2008
+    - Added pmkpasswd utility
+    - Forgot to add prereq for Crypt::PasswdMD5
+
+1.26  Sat Feb 16 13:50:36 GMT 2008
+    - Added crypt/md5 encryption for OPER passwords. New funcs in ::Common,
+      mkpasswd and chkpasswd. Updated common test. Thanks to nanonyme for
+      the suggestion.
+
+1.24  Thu Nov 1 14:00:41 GMT 2007
+    - Update Module::Install to 0.68
+
+1.22  Sun Sep 23 10:13:14 GMT 2007
+    - Added config option to enable oper only RPL_WHOISACTUALLY as
+      suggested by Kaitlyn Parkhurst
+
+1.20  Thu Sep 20 17:56:26 GMT 2007
+    - Removed executable property from Makefile.PL
+    - Updated some of the prereqs in Makefile.PL
+
+1.18  Sat Aug 25 18:01:14 GMT 2007
+    - Applied a patch from lunartear to fix PONG responses
+
+1.16  Thu Aug 23 16:16:45 GMT 2007
+    - add_listener() was using BindAddr instead of BindAddress when calling
+      SocketFactory. Spotted by lunartear
+
+1.14  Thu Aug 23 15:53:52 GMT 2007
+    - Updated the SSL certificate and key
+    - Added 'ircd_listener_failure' output event.
+
+1.12  Fri Jun 29 10:28:37 GMT 2007
+    - Documentation fixes. Added state_(nicks|chans|peers) methods and
+      documented.
+
+0.11  Tue Feb 13 15:57:17 GMT 2007
+    - Refactored the MagNET Oper hacks. Should all work as expected now.
+
+1.10  Tue Feb 13 11:53:44 GMT 2007
+    - Added MagNET Oper hacks.
+    - Added new test, Test::Kwalitee
+
+1.09  Mon Jan 29 14:52:17 GMT 2007
+    - Kwalitee fixes.
+
+1.08  Tue Jan 23 09:58:13 GMT 2007
+    - Fixed a problem with the module on perl-5.6.1
+
+1.07  Fri Dec 29 11:09:49 GMT 2006
+    - PoCo-IRC TOPIC bug caused problems with topic test. Raised poco-irc
+      prereq to 5.18.
+
+1.06  Sat Dec 2 15:46:33 GMT 2006
+    - Automagic registration of parent sessions added, as per buu's
+      suggestion
+
+1.05  Sun Nov 19 14:29:24 GMT 2006
+    - Fixed problem with LIST and topics. Fixed TOPIC command as well.
+      Added a test. Reported by eggzeck"
+
+1.04  Thu Nov 16 09:25:31 GMT 2006
+    - Documentation fix for ::Pipeline, spotted by Martijn van Beers.
+    - Made the compresslink test skip on *bsd systems, which currently have
+      issues that test.
+    - Problem with 472 numeric response fixed. Reported by eggzeck.
+
+1.03  Thu Oct 26 12:14:17 GMT 2006
+    - Ported parse_user() from PoCo-IRC-Common. Ported the new improved
+      shiny parse_mode_line() from the same source.
+
+1.02  Fri Sep 29 08:57:44 GMT 2006
+    - Fixed RT #21769. Sppofed nicks now have a default ircname set.
+      Reported by David Serrano
+
+1.01  Wed Sep 27 10:12:39 GMT 2006
+    - Ensured all modules had 'use strict'
+
+1.00  Tue Sep 26 09:09:22 GMT 2006
+    - Removed Build.PL and bumped versions for release.
+
+0.99_05  Sat Sep 16 15:43:54 GMT 2006
+    - Updated to use Module::Install
+
+0.99_04  Wed Sep 6 17:43:39 GMT 2006
+    - Added OperServ subclass once again. New and improved and shiny. With
+      a test.
+    - Added documentation to OperServ and bumped the version numbers.
+
+0.99_03  Sun Sep 3 17:16:55 GMT 2006
+    - Added pod and pod coverage tests. Fixed documentation accordingly.
+
+0.99_02  Mon Aug 28 18:01:25 GMT 2006
+    - Fucking test was smurfed, still had PoCo-Server-IRC-OperServ in the
+      simple test. Fucktard.
+
+0.99_01  Mon Aug 28 17:30:21 GMT 2006
+    - IRC.pm is now a subclass of Backend.
+    - Updated the documentation in Plugin.pm, removed references to USER
+      events as they aren't applicable.
+    - Added compressed links using POE::Filter::Zlib to ::Backend.
+    - Fixed a bug in the auth system by switching to using Ident::Agent.
+    - Added simpleclient.pl for testing purposes. Backend: now has
+      connection idle tracking. Daemon: implemented nearly all IRC client
+      commands, ( lacking STATS, LINKS, CONNECT, OPER, KILL, etc. ),
+      extended 2_pocosi.t to suit.
+    - Implemented OPER, KILL
+    - Server to server code written and debugged against Hybrid-7.0 \o/
+    - Added REMOVE command a la Freenode hyperion, which is a forced PART.
+    - Added test script for SSLify with associated key/cert combo
+    - We now generate multiple RPL_NAMES if the line length exceeds 510
+      characters.
+    - RPL_WHOISCHANNELS automagically splits on long lines now
+    - More documentation, including SYNOPSIS.
+    - Refactored INVITE code and added handler for peer INVITE messages
+    - Implemented GLINE, KLINE, RKLINE and UNKLINE peer and oper commands.
+    - Implemented spoofed SJOIN command, so spoofed nicks can reset
+      channels. All applicable commands should multiline if output lines >
+      510 chars now. Makefile.PL will detect previous poco-server-irc
+      installs and warn of API changes.
+    - Implemented MODES, the maximum number of non-simple chanmodes that
+      can be applied in one go. Numerous tweaks and fixes. Still haven't
+      got to the bottom of the chan desyncs with half-ops.
+    - Fixed a bug in SJOIN code. Tested using 60 flood bots. Favourable
+      results.
+    - Fixed SQUIT, it was working fine for a leaf-node, but not as a hub.
+    - Reimplemented PRIVMSG/NOTICE handling for both client and peer. Now
+      supports exactly the same syntax as Hybrid.
+    - Changes to UMODE code; Implemented LOCOPS, WALLOPS and OPERWALL
+      commands for client/peer; Added WALLOPS server API command;
+    - Implemented +D umode which is channel deafness, ho-hum.
+    - Added ACCEPT command as related to CALLERID.
+    - Implemented CALLERID (+Gg).
+    - Added a README
+
+0.3  Thu Aug 25 14:06:01 GMT 2005
+    - Amended POD to link the ThreatNet web site.
+    - Added use strict and caught and fixed a lot of typos/scoping
+      problems.
+
+0.02  Mon Jun 20 09:50:14 GMT 2005
+    - First CPAN release

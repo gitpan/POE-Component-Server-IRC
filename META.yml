@@ -1,14 +1,14 @@
 ---
-abstract: 'A fully event-driven networkable IRC server daemon module'
+abstract: 'A fully event-driven networkable IRC server daemon module.'
 author:
   - 'Chris Williams <chris@bingosnet.co.uk>'
 build_requires:
-  ExtUtils::MakeMaker: 6.42
+  POE::Component::IRC: 5.70
   Test::More: 0.47
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
-distribution_type: module
-generated_by: 'Module::Install version 0.91'
+  ExtUtils::MakeMaker: 6.31
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.102342, CPAN::Meta::Converter version 2.102400'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,52 +16,28 @@ meta-spec:
 name: POE-Component-Server-IRC
 no_index:
   directory:
-    - examples
-    - inc
     - t
     - xt
-provides:
-  POE::Component::Server::IRC:
-    file: lib/POE/Component/Server/IRC.pm
-    version: 1.40
-  POE::Component::Server::IRC::Backend:
-    file: lib/POE/Component/Server/IRC/Backend.pm
-    version: 1.40
-  POE::Component::Server::IRC::Common:
-    file: lib/POE/Component/Server/IRC/Common.pm
-    version: 1.40
-  POE::Component::Server::IRC::OperServ:
-    file: lib/POE/Component/Server/IRC/OperServ.pm
-    version: 1.40
-  POE::Component::Server::IRC::Pipeline:
-    file: lib/POE/Component/Server/IRC/Pipeline.pm
-    version: 1.40
-  POE::Component::Server::IRC::Plugin:
-    file: lib/POE/Component/Server/IRC/Plugin.pm
-    version: 1.40
-  POE::Component::Server::IRC::Test::Plugin:
-    file: lib/POE/Component/Server/IRC/Test/Plugin.pm
-    version: 1.40
+    - examples
+recommends:
+  POE::Component::SSLify: 0
+  POE::Filter::Zlib::Stream: 0
 requires:
   Algorithm::Diff: 1.19
-  Carp: 0
   Crypt::PasswdMD5: 1.3
   Date::Format: 0
   Net::Netmask: 1.9012
+  Object::Pluggable: 1.29
   POE: 0.9999
-  POE::Component::Client::DNS: 1
-  POE::Component::Client::Ident: 1
-  POE::Component::IRC: 5.7
-  POE::Component::Pluggable: 1.14
+  POE::Component::Client::DNS: 1.00
+  POE::Component::Client::Ident: 1.00
   POE::Filter::IRCD: 2.2
-  POE::Filter::Line: 0
-  POE::Filter::Stackable: 0
-  POE::Wheel::ReadWrite: 0
-  POE::Wheel::SocketFactory: 0
-  Socket: 0
-  perl: 5.6.0
+  constant: 1.17
+  perl: 5.006
 resources:
-  homepage: http://github.com/bingos/poe-component-server-irc/tree
+  bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=POE-Component-Server-IRC
+  homepage: http://search.cpan.org/dist/POE-Component-Server-IRC/
   license: http://dev.perl.org/licenses/
   repository: git://github.com/bingos/poe-component-server-irc.git
-version: 1.40
+version: 1.41
+x_authority: cpan:BINGOS

@@ -1,11 +1,15 @@
 package POE::Component::Server::IRC::OperServ;
+BEGIN {
+  $POE::Component::Server::IRC::OperServ::AUTHORITY = 'cpan:BINGOS';
+}
+BEGIN {
+  $POE::Component::Server::IRC::OperServ::VERSION = '1.41';
+}
 
 use strict;
 use warnings;
 use POE::Component::Server::IRC::Plugin qw(:ALL);
 use base qw(POE::Component::Server::IRC);
-
-our $VERSION = '1.40';
 
 sub _load_our_plugins {
   my $self = shift;
