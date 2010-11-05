@@ -12,7 +12,7 @@ my %WriteMakefileArgs = (
   'ABSTRACT' => 'A fully event-driven networkable IRC server daemon module.',
   'AUTHOR' => 'Chris Williams <chris@bingosnet.co.uk>',
   'BUILD_REQUIRES' => {
-    'POE::Component::IRC' => '5.70',
+    'POE::Component::IRC' => '6.51',
     'Test::More' => '0.47'
   },
   'CONFIGURE_REQUIRES' => {
@@ -36,7 +36,7 @@ my %WriteMakefileArgs = (
     'POE::Filter::IRCD' => '2.2',
     'constant' => '1.17'
   },
-  'VERSION' => '1.41',
+  'VERSION' => '1.42',
   'test' => {
     'TESTS' => 't/*.t'
   }

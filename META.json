@@ -47,7 +47,7 @@
       },
       "test" : {
          "requires" : {
-            "POE::Component::IRC" : "5.70",
+            "POE::Component::IRC" : "6.51",
             "Test::More" : "0.47"
          }
       }
@@ -68,7 +68,7 @@
          "web" : "http://github.com/bingos/poe-component-server-irc"
       }
    },
-   "version" : "1.41",
+   "version" : "1.42",
    "x_authority" : "cpan:BINGOS"
 }
 
