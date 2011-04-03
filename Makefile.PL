@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-BEGIN { require 5.006; }
+
 
 use ExtUtils::MakeMaker 6.31;
 
@@ -25,18 +25,16 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'POE::Component::Server::IRC',
   'PREREQ_PM' => {
-    'Algorithm::Diff' => '1.19',
     'Crypt::PasswdMD5' => '1.3',
-    'Date::Format' => '0',
+    'IRC::Utils' => '0.03',
     'Net::Netmask' => '1.9012',
     'Object::Pluggable' => '1.29',
     'POE' => '0.9999',
     'POE::Component::Client::DNS' => '1.00',
     'POE::Component::Client::Ident' => '1.00',
-    'POE::Filter::IRCD' => '2.2',
-    'constant' => '1.17'
+    'POE::Filter::IRCD' => '2.2'
   },
-  'VERSION' => '1.42',
+  'VERSION' => '1.43',
   'test' => {
     'TESTS' => 't/*.t'
   }

@@ -32,17 +32,14 @@
             "POE::Filter::Zlib::Stream" : 0
          },
          "requires" : {
-            "Algorithm::Diff" : "1.19",
             "Crypt::PasswdMD5" : "1.3",
-            "Date::Format" : 0,
+            "IRC::Utils" : "0.03",
             "Net::Netmask" : "1.9012",
             "Object::Pluggable" : "1.29",
             "POE" : "0.9999",
             "POE::Component::Client::DNS" : "1.00",
             "POE::Component::Client::Ident" : "1.00",
-            "POE::Filter::IRCD" : "2.2",
-            "constant" : "1.17",
-            "perl" : "5.006"
+            "POE::Filter::IRCD" : "2.2"
          }
       },
       "test" : {
@@ -68,7 +65,7 @@
          "web" : "http://github.com/bingos/poe-component-server-irc"
       }
    },
-   "version" : "1.42",
+   "version" : "1.43",
    "x_authority" : "cpan:BINGOS"
 }
 

@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::OperServ::AUTHORITY = 'cpan:BINGOS';
 }
 BEGIN {
-  $POE::Component::Server::IRC::OperServ::VERSION = '1.42';
+  $POE::Component::Server::IRC::OperServ::VERSION = '1.43';
 }
 
 use strict;
