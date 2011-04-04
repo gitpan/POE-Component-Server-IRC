@@ -1,9 +1,9 @@
 package POE::Component::Server::IRC::OperServ;
 BEGIN {
-  $POE::Component::Server::IRC::OperServ::AUTHORITY = 'cpan:BINGOS';
+  $POE::Component::Server::IRC::OperServ::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::OperServ::VERSION = '1.43';
+  $POE::Component::Server::IRC::OperServ::VERSION = '1.44';
 }
 
 use strict;

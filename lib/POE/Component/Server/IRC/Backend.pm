@@ -1,9 +1,9 @@
 package POE::Component::Server::IRC::Backend;
 BEGIN {
-  $POE::Component::Server::IRC::Backend::AUTHORITY = 'cpan:BINGOS';
+  $POE::Component::Server::IRC::Backend::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::Backend::VERSION = '1.43';
+  $POE::Component::Server::IRC::Backend::VERSION = '1.44';
 }
 
 use strict;

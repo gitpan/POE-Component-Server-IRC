@@ -10,7 +10,7 @@ use ExtUtils::MakeMaker 6.31;
 
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'A fully event-driven networkable IRC server daemon module.',
-  'AUTHOR' => 'Chris Williams <chris@bingosnet.co.uk>',
+  'AUTHOR' => 'Chris Williams <chris@bingosnet.co.uk>, Hinrik Örn Sigurðsson <hinrik.sig@gmail.com>',
   'BUILD_REQUIRES' => {
     'POE::Component::IRC' => '6.51',
     'Test::More' => '0.47'
@@ -26,7 +26,7 @@ my %WriteMakefileArgs = (
   'NAME' => 'POE::Component::Server::IRC',
   'PREREQ_PM' => {
     'Crypt::PasswdMD5' => '1.3',
-    'IRC::Utils' => '0.03',
+    'IRC::Utils' => '0.06',
     'Net::Netmask' => '1.9012',
     'Object::Pluggable' => '1.29',
     'POE' => '0.9999',
@@ -34,7 +34,7 @@ my %WriteMakefileArgs = (
     'POE::Component::Client::Ident' => '1.00',
     'POE::Filter::IRCD' => '2.2'
   },
-  'VERSION' => '1.43',
+  'VERSION' => '1.44',
   'test' => {
     'TESTS' => 't/*.t'
   }
