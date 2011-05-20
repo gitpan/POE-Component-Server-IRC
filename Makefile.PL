@@ -30,10 +30,10 @@ my %WriteMakefileArgs = (
     'List::Util' => '0',
     'Net::Netmask' => '1.9012',
     'POE' => '0.9999',
-    'POE::Component::Syndicator' => '0',
+    'POE::Component::Syndicator' => '0.04',
     'POE::Filter::IRCD' => '2.2'
   },
-  'VERSION' => '1.45',
+  'VERSION' => '1.46',
   'test' => {
     'TESTS' => 't/*.t'
   }

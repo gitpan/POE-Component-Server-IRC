@@ -40,7 +40,7 @@
             "List::Util" : 0,
             "Net::Netmask" : "1.9012",
             "POE" : "0.9999",
-            "POE::Component::Syndicator" : 0,
+            "POE::Component::Syndicator" : "0.04",
             "POE::Filter::IRCD" : "2.2"
          }
       },
@@ -67,7 +67,7 @@
          "web" : "http://github.com/bingos/poe-component-server-irc"
       }
    },
-   "version" : "1.45",
+   "version" : "1.46",
    "x_authority" : "cpan:HINRIK"
 }
 

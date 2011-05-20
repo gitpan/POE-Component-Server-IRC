@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::Backend::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::Backend::VERSION = '1.45';
+  $POE::Component::Server::IRC::Backend::VERSION = '1.46';
 }
 
 use strict;
@@ -23,7 +23,6 @@ use constant {
         add_connector      => '_add_connector',
         add_filter         => '_add_filter',
         add_listener       => '_add_listener',
-        del_filter         => '_del_filter',
         del_listener       => '_del_listener',
         send_output        => '_send_output',
         shutdown           => '_shutdown',
@@ -261,7 +260,7 @@ sub _accept_connection {
             $sockport
         );
 
-        if ($listener->{do_auth} && $self->{auth}) {
+        if ($listener->{auth} && $self->{auth}) {
             $kernel->yield('_auth_client', $wheel_id);
         }
         else {
@@ -274,10 +273,9 @@ sub _accept_connection {
             );
         }
 
-        $ref->{freq} = $listener->{freq};
         $ref->{alarm} = $kernel->delay_set(
             '_conn_alarm',
-            $listener->{freq},
+            $listener->{idle},
             $wheel_id,
         );
         $self->{wheels}{$wheel_id} = $ref;
@@ -299,7 +297,7 @@ sub _add_listener {
     $args{ lc($_) } = delete $args{$_} for keys %args;
 
     my $bindport  = $args{port} || 0;
-    my $freq      = $args{freq} || 180;
+    my $idle      = $args{idle} || 180;
     my $auth      = 1;
     my $antiflood = 1;
     my $usessl    = 0;
@@ -327,8 +325,8 @@ sub _add_listener {
         $self->{listening_ports}{$port} = $listener_id;
         $self->{listeners}{$listener_id}{wheel}     = $listener;
         $self->{listeners}{$listener_id}{port}      = $port;
-        $self->{listeners}{$listener_id}{freq}      = $freq;
-        $self->{listeners}{$listener_id}{do_auth}   = $auth;
+        $self->{listeners}{$listener_id}{idle}      = $idle;
+        $self->{listeners}{$listener_id}{auth}      = $auth;
         $self->{listeners}{$listener_id}{antiflood} = $antiflood;
         $self->{listeners}{$listener_id}{usessl}    = $usessl;
     }
@@ -562,11 +560,11 @@ sub _conn_alarm {
     $self->send_event(
         "$self->{prefix}connection_idle",
         $wheel_id,
-        $conn->{freq},
+        $conn->{idle},
     );
     $conn->{alarm} = $kernel->delay_set(
         '_conn_alar',
-        $conn->{freq},
+        $conn->{idle},
         $wheel_id,
     );
 
@@ -608,7 +606,7 @@ sub _conn_input {
         );
     }
     $conn->{seen} = time();
-    $kernel->delay_adjust($conn->{alarm}, $conn->{freq});
+    $kernel->delay_adjust($conn->{alarm}, $conn->{idle});
 
     # TODO: Antiflood code
     if ($self->antiflood($wheel_id)) {
@@ -618,16 +616,6 @@ sub _conn_input {
         my $event = "$self->{prefix}cmd_" . lc $input->{command};
         $self->send_event($event, $wheel_id, $input);
     }
-    return;
-}
-
-sub _del_filter {
-    my ($kernel, $self, $sender) = @_[KERNEL, OBJECT, SENDER];
-    my $wheel_id = $_[ARG0] || croak("You must supply a connection id\n");
-    return if !$self->_wheel_exists($wheel_id);
-
-    $self->{wheels}{$wheel_id}{wheel}->set_filter($self->{filter});
-    $self->send_event("$self->{prefix}filter_del", $wheel_id);
     return;
 }
 
@@ -1476,12 +1464,21 @@ Takes a number of arguments. Adds a new listener.
 
 =item * B<'port'>, the TCP port to listen on. Default is a random port;
 
-=item * B<'auth'>, enable or disable auth sub-system for this listener. Default
-enabled;
+=item * B<'auth'>, enable or disable auth sub-system for this listener.
+Enabled by default;
 
 =item * B<'bindaddr'>, specify a local address to bind the listener to;
 
 =item * B<'listenqueue'>, change the SocketFactory's ListenQueue;
+
+=item * B<'usessl'>, whether the listener should use SSL. Default is
+false;
+
+=item * B<'antiflood'>, whether the listener should use flood protection.
+Defaults is true;
+
+=item * B<'idle'>, the time, in seconds, after which a connection will be
+considered idle. Defaults is 180.
 
 =back
 

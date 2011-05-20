@@ -31,12 +31,12 @@ requires:
   List::Util: 0
   Net::Netmask: 1.9012
   POE: 0.9999
-  POE::Component::Syndicator: 0
+  POE::Component::Syndicator: 0.04
   POE::Filter::IRCD: 2.2
 resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=POE-Component-Server-IRC
   homepage: http://search.cpan.org/dist/POE-Component-Server-IRC/
   license: http://dev.perl.org/licenses/
   repository: git://github.com/bingos/poe-component-server-irc.git
-version: 1.45
+version: 1.46
 x_authority: cpan:HINRIK
