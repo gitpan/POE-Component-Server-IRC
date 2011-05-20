@@ -4,7 +4,7 @@ use warnings;
 
 
 
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
@@ -16,7 +16,7 @@ my %WriteMakefileArgs = (
     'Test::More' => '0.47'
   },
   'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.31'
+    'ExtUtils::MakeMaker' => '6.30'
   },
   'DISTNAME' => 'POE-Component-Server-IRC',
   'EXE_FILES' => [
@@ -26,15 +26,14 @@ my %WriteMakefileArgs = (
   'NAME' => 'POE::Component::Server::IRC',
   'PREREQ_PM' => {
     'Crypt::PasswdMD5' => '1.3',
-    'IRC::Utils' => '0.06',
+    'IRC::Utils' => '0.09',
+    'List::Util' => '0',
     'Net::Netmask' => '1.9012',
-    'Object::Pluggable' => '1.29',
     'POE' => '0.9999',
-    'POE::Component::Client::DNS' => '1.00',
-    'POE::Component::Client::Ident' => '1.00',
+    'POE::Component::Syndicator' => '0',
     'POE::Filter::IRCD' => '2.2'
   },
-  'VERSION' => '1.44',
+  'VERSION' => '1.45',
   'test' => {
     'TESTS' => 't/*.t'
   }

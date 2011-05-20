@@ -5,7 +5,7 @@
       "Hinrik \u00c3\u0096rn Sigur\u00c3\u00b0sson <hinrik.sig@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.102342, CPAN::Meta::Converter version 2.102400",
+   "generated_by" : "Dist::Zilla version 4.200006, CPAN::Meta::Converter version 2.110440",
    "license" : [
       "perl_5"
    ],
@@ -24,22 +24,23 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.31"
+            "ExtUtils::MakeMaker" : "6.30"
          }
       },
       "runtime" : {
          "recommends" : {
+            "POE::Component::Client::DNS" : "1.00",
+            "POE::Component::Client::Ident" : "1.00",
             "POE::Component::SSLify" : 0,
             "POE::Filter::Zlib::Stream" : 0
          },
          "requires" : {
             "Crypt::PasswdMD5" : "1.3",
-            "IRC::Utils" : "0.06",
+            "IRC::Utils" : "0.09",
+            "List::Util" : 0,
             "Net::Netmask" : "1.9012",
-            "Object::Pluggable" : "1.29",
             "POE" : "0.9999",
-            "POE::Component::Client::DNS" : "1.00",
-            "POE::Component::Client::Ident" : "1.00",
+            "POE::Component::Syndicator" : 0,
             "POE::Filter::IRCD" : "2.2"
          }
       },
@@ -66,7 +67,7 @@
          "web" : "http://github.com/bingos/poe-component-server-irc"
       }
    },
-   "version" : "1.44",
+   "version" : "1.45",
    "x_authority" : "cpan:HINRIK"
 }
 

@@ -26,8 +26,8 @@ ircd.key
 lib/POE/Component/Server/IRC.pm
 lib/POE/Component/Server/IRC/Backend.pm
 lib/POE/Component/Server/IRC/Common.pm
-lib/POE/Component/Server/IRC/OperServ.pm
 lib/POE/Component/Server/IRC/Plugin.pm
+lib/POE/Component/Server/IRC/Plugin/OperServ.pm
 t/1_common.t
 t/1_simple.t
 t/2_pocosi.t
