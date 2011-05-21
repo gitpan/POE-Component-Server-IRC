@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::Backend::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::Backend::VERSION = '1.46';
+  $POE::Component::Server::IRC::Backend::VERSION = '1.47';
 }
 
 use strict;
@@ -21,14 +21,12 @@ use constant {
     OBJECT_STATES_HASHREF => {
         syndicator_started => '_start',
         add_connector      => '_add_connector',
-        add_filter         => '_add_filter',
         add_listener       => '_add_listener',
         del_listener       => '_del_listener',
         send_output        => '_send_output',
         shutdown           => '_shutdown',
     },
     OBJECT_STATES_ARRAYREF => [qw(
-        __send_output
         _accept_connection
         _accept_failed
         _auth_client
@@ -54,6 +52,7 @@ sub create {
     $args{ lc $_ } = delete $args{$_} for keys %args;
     my $self = bless { }, $package;
 
+    $self->{raw_events} = $args{raw_events} if defined $args{raw_events};
     $self->{prefix} = defined $args{prefix}
         ? $args{prefix}
         : 'ircd_';
@@ -63,11 +62,6 @@ sub create {
     $self->{auth} = defined $args{auth}
         ? $args{auth}
         : 1;
-
-    eval {
-        require POE::Filter::Zlib::Stream;
-        $self->{got_zlib} = 1;
-    };
 
     if ($self->{auth}) {
         eval {
@@ -157,7 +151,6 @@ sub _start {
     my ($kernel, $self, $sender) = @_[KERNEL, OBJECT, SENDER];
 
     $self->{ircd_filter} = POE::Filter::IRCD->new(
-        DEBUG    => $self->{debug},
         colonify => 1,
     );
     $self->{line_filter} = POE::Filter::Line->new(
@@ -175,6 +168,12 @@ sub _start {
         );
     }
 
+    return;
+}
+
+sub raw_events {
+    my ($self, $value) = @_;
+    $self->{raw_events} = 1 if $value;
     return;
 }
 
@@ -483,30 +482,8 @@ sub _sock_up {
     return;
 }
 
-sub _add_filter {
-    my ($kernel, $self, $sender) = @_[KERNEL, OBJECT, SENDER];
-    my $wheel_id = $_[ARG0] || croak("You must supply a connection id\n");
-    my $filter = $_[ARG1] || croak("You must supply a filter object\n");
-    return if !$self->_wheel_exists($wheel_id);
-
-    my $stackable = POE::Filter::Stackable->new(
-        Filters => [
-            $self->{line_filter},
-            $self->{ircd_filter},
-            $filter,
-        ],
-    );
-
-    if ($self->compressed_link($wheel_id)) {
-        $stackable->unshift(POE::Filter::Zlib::Stream->new());
-    }
-    $self->{wheels}{$wheel_id}{wheel}->set_filter($stackable);
-    $self->send_event("$self->{prefix}filter_add", $wheel_id, $filter);
-    return;
-}
-
 sub _anti_flood {
-    my ($self, $wheel_id, $input) = splice @_, 0, 3;
+    my ($self, $wheel_id, $input) = @_;
     my $current_time = time();
 
     return if !$wheel_id || !$self->_wheel_exists($wheel_id) || !$input;
@@ -641,29 +618,16 @@ sub send_output {
     my ($self, $output) = splice @_, 0, 2;
 
     if ($output && ref $output eq 'HASH') {
-        if (@_ == 1 || $output->{command}
-            && $output->{command} eq 'ERROR') {
-
-            for my $id (grep { $self->_wheel_exists($_) } @_) {
-                $self->{wheels}{ $id}{wheel}->put($output);
-            }
-            return 1;
-        }
-
         for my $id (grep { $self->_wheel_exists($_) } @_) {
-            $self->yield('__send_output', $output, $id);
+            if ($self->{raw_events}) {
+                my $out = $self->{filter}->put([$output])->[0];
+                chomp $out;
+                $self->send_event("$self->{prefix}raw_output", $id, $out);
+            }
+            $self->{wheels}{$id}{wheel}->put($output);
         }
-        return 1;
     }
 
-    return;
-}
-
-sub __send_output {
-    my ($self, $output, $route_id) = @_[OBJECT, ARG0, ARG1];
-    if ($self->_wheel_exists($route_id)) {
-        $self->{wheels}{$route_id}{wheel}->put($output);
-    }
     return;
 }
 
@@ -944,7 +908,8 @@ sub ident_agent_error {
 }
 
 sub antiflood {
-    my ($self, $wheel_id, $value) = splice @_, 0, 3;
+    my ($self, $wheel_id, $value) = @_;
+
     return if !$self->_wheel_exists($wheel_id);
     return 0 if !$self->{antiflood};
     return $self->{wheels}{$wheel_id}{antiflood} if !defined $value;
@@ -967,12 +932,19 @@ sub antiflood {
 }
 
 sub compressed_link {
-    my ($self, $wheel_id, $value, $cntr) = splice @_, 0, 4;
+    my ($self, $wheel_id, $value, $cntr) = @_;
     return if !$self->_wheel_exists($wheel_id);
-    return 0 if !$self->{got_zlib};
     return $self->{wheels}{$wheel_id}{compress} if !defined $value;
 
     if ($value) {
+        if (!$self->{got_zlib}) {
+            eval {
+                require POE::Filter::Zlib::Stream;
+                $self->{got_zlib} = 1;
+            };
+            chomp $@;
+            croak($@) if !$self->{got_zlib};
+        }
         if ($cntr) {
             $self->{wheels}{$wheel_id}{wheel}->get_input_filter()->unshift(
                 POE::Filter::Zlib::Stream->new()
@@ -995,14 +967,14 @@ sub compressed_link {
 }
 
 sub disconnect {
-    my ($self, $wheel_id, $string) = splice @_, 0, 3;
+    my ($self, $wheel_id, $string) = @_;
     return if !$wheel_id || !$self->_wheel_exists($wheel_id);
     $self->{wheels}{$wheel_id}{disconnecting} = $string || 'Client Quit';
     return;
 }
 
 sub _disconnected {
-    my ($self, $wheel_id, $errstr) = splice @_, 0, 3;
+    my ($self, $wheel_id, $errstr) = @_;
     return if !$wheel_id || !$self->_wheel_exists($wheel_id);
 
     my $conn = delete $self->{wheels}{$wheel_id};
@@ -1019,7 +991,7 @@ sub _disconnected {
 }
 
 sub connection_info {
-    my ($self, $wheel_id) = splice @_, 0, 2;
+    my ($self, $wheel_id) = @_;
     return if !$self->_wheel_exists($wheel_id);
     return map {
         $self->{wheels}{$wheel_id}{$_}
@@ -1149,17 +1121,26 @@ Returns an object. Accepts the following parameters, all are optional:
 
 =item * B<'alias'>, a POE::Kernel alias to set;
 
-=item * B<'auth'>, set to 0 to globally disable IRC authentication, default
-is auth is enabled;
+=item * B<'auth'>, set to a false value to globally disable IRC
+authentication, default is auth is enabled;
 
-=item * B<'antiflood'>, set to 0 to globally disable flood protection;
+=item * B<'antiflood'>, set to a false value to globally disable flood
+protection, default is true;
 
-=item * B<'prefix'>, this is the prefix that is used to generate event names
-that the component produces. The default is 'ircd_backend_'.
+=item * B<'prefix'>, this is the prefix that is used to generate event
+names that the component produces. The default is 'ircd_'.
 
 =item * B<'states'>, an array reference of extra objects states for the IRC
 daemon's POE sessions. The elements can be array references of states
 as well as hash references of state => handler pairs.
+
+=item * B<'plugin_debug'>, set to a true value to print plugin debug info.
+Default is false.
+
+=item * B<'options'>, a hashref of options to L<POE::Session|POE::Session>
+
+=item * B<'raw_events'>, whether to send L<raw|/ircd_raw_input> events.
+False by default. Can be enabled later with L<C<raw_events>|/raw_events>;
 
 =back
 
@@ -1183,8 +1164,6 @@ I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/session
 Takes no arguments. Returns the ID of the component's session. Ideal for
 posting events to the component.
 
- $kernel->post($irc->session_id() => 'mode' => $channel => '+o' => $dude);
-
 =head3 C<session_alias>
 
 I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/session_alias>>
@@ -1199,8 +1178,6 @@ I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/yield>>
 This method provides an alternative object based means of posting events
 to the component. First argument is the event to post, following arguments
 are sent as arguments to the resultant post.
-
- $irc->yield(mode => $channel => '+o' => $dude);
 
 =head3 C<call>
 
@@ -1219,8 +1196,6 @@ first argument is an arrayref consisting of the delayed command to post and
 any command arguments. The second argument is the time in seconds that one
 wishes to delay the command being posted.
 
- my $alarm_id = $ircd->delay( [ mode => $channel => '+o' => $dude ], 60 );
-
 Returns an alarm ID that can be used with L<C<delay_remove>|/delay_remove>
 to cancel the delayed event. This will be undefined if something went
 wrong.
@@ -1232,8 +1207,6 @@ I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/delay_r
 This method removes a previously scheduled delayed event from the
 component. Takes one argument, the C<alarm_id> that was returned by a
 L<C<delay>|/delay> method call.
-
- my $arrayref = $ircd->delay_remove( $alarm_id );
 
 Returns an arrayref that was originally requested to be delayed.
 
@@ -1266,6 +1239,11 @@ will receive it after you do, then an event sent with C<send_event_now>
 will be received by those plugins/sessions I<before> the current event.
 Takes the same arguments as L<C<send_event>|/send_event>.
 
+=head3 C<raw_events>
+
+If called with a true value, raw events (L<C<ircd_raw_input>|/ircd_raw_input>
+and L<C<ircd_raw_output>|/ircd_raw_output>) will be enabled.
+
 =head2 Connections
 
 =head3 C<antiflood>
@@ -1277,10 +1255,10 @@ antiflood protection is returned. Returns undef on error.
 
 =head3 C<compressed_link>
 
-Takes two arguments, a connection id and true/false value. If value is
-specified compression is enabled or disabled accordingly for the specified
-connection. If a value is not specified the current status of compression
-is returned. Returns undef on error.
+Takes two arguments, a connection id and true/false value. If a value is
+specified, compression will be enabled or disabled accordingly for the
+specified connection. If a value is not specified the current status of
+compression is returned. Returns undef on error.
 
 =head3 C<disconnect>
 
@@ -1295,19 +1273,19 @@ Takes one argument, a connection_id. Returns a list consisting of: the IP
 address of the peer; the port on the peer; our socket address; our socket
 port. Returns undef on error.
 
- my ($peeraddr, $peerport, $sockaddr, $sockport) = $object->connection_info($conn_id);
+ my ($peeraddr, $peerport, $sockaddr, $sockport) = $ircd->connection_info($conn_id);
 
 =head3 C<add_denial>
 
 Takes one mandatory argument and one optional. The first mandatory
-argument is a L<Net::Netmask> object that will be used to check
-connecting IP addresses against. The second optional argument is a reason
-string for the denial.
+argument is a L<Net::Netmask|Net::Netmask> object that will be used to
+check connecting IP addresses against. The second optional argument is a
+reason string for the denial.
 
 =head3 C<del_denial>
 
-Takes one mandatory argument, a L<Net::Netmask> object to remove from the
-current denial list.
+Takes one mandatory argument, a L<Net::Netmask|Net::Netmask> object to
+remove from the current denial list.
 
 =head3 C<denied>
 
@@ -1316,13 +1294,13 @@ whether that IP is denied or not.
 
 =head3 C<add_exemption>
 
-Takes one mandatory argument, a L<Net::Netmask> object that will be
-checked against connecting IP addresses for exemption from denials.
+Takes one mandatory argument, a L<Net::Netmask|Net::Netmask> object that
+will be checked against connecting IP addresses for exemption from denials.
 
 =head3 C<del_exemption>
 
-Takes one mandatory argument, a L<Net::Netmask> object to remove from the
-current exemption list.
+Takes one mandatory argument, a L<Net::Netmask|Net::Netmask> object to
+remove from the current exemption list.
 
 =head3 C<exempted>
 
@@ -1354,8 +1332,8 @@ multiple plugins of the same kind active in one Object::Pluggable object.
 This method goes through the pipeline's C<push()> method, which will call
 C<< $plugin->plugin_register($pluggable, @args) >>.
 
-Returns the number of plugins now in the pipeline if plugin was initialized,
-C<undef>/an empty list if not.
+Returns the number of plugins now in the pipeline if plugin was
+initialized, C<undef>/an empty list if not.
 
 =head3 C<plugin_del>
 
@@ -1420,8 +1398,8 @@ names.
 
 It is possible to register for all events by specifying 'all' as an event.
 
-Returns 1 if everything checked out fine, C<undef>/an empty list if something
-is seriously wrong.
+Returns 1 if everything checked out fine, C<undef>/an empty list if
+something is seriously wrong.
 
 =head3 C<plugin_unregister>
 
@@ -1450,11 +1428,29 @@ These are POE events that the component will accept:
 
 =head2 C<register>
 
-Takes no arguments. Registers a session to receive events from the component.
+I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/register>>
+
+Takes N arguments: a list of event names that your session wants to listen
+for, minus the C<irc_> prefix.
+
+ $ircd->yield('register', qw(connected disconnected));
+
+The special argument 'all' will register your session for all events.
+Registering will generate an L<C<ircd_registered>|/ircd_registered>
+event that your session can trap.
 
 =head2 C<unregister>
 
-Takes no arguments. Unregisters a previously registered session.
+I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/unregister>>
+
+Takes N arguments: a list of event names which you I<don't> want to
+receive. If you've previously done a L<C<register>|/register>
+for a particular event which you no longer care about, this event will
+tell the component to stop sending them to you. (If you haven't, it just
+ignores you. No big deal.)
+
+If you have registered with 'all', attempting to unregister individual
+events such as 'connected', etc. will not work. This is a 'feature'.
 
 =head2 C<add_listener>
 
@@ -1511,8 +1507,7 @@ Opens a TCP connection to specified address and port.
 
 Takes a hashref and one or more connection IDs.
 
- $poe_kernel->post(
-     $object->session_id(),
+ $ircd->yield(
      'send_output',
      {
          prefix  => 'blah!~blah@blah.blah.blah',
@@ -1525,6 +1520,26 @@ Takes a hashref and one or more connection IDs.
 =head1 OUTPUT EVENTS
 
 These following events are sent to interested sessions.
+
+=head2 C<ircd_registered>
+
+I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/syndicator_registered>>
+
+=over
+
+=item Emitted: when a session registers with the component;
+
+=item Target: the registering session;
+
+=item Args:
+
+=over 4
+
+=item * C<ARG0>: the component's object;
+
+=back
+
+=back
 
 =head2 C<ircd_connection>
 
@@ -1721,11 +1736,11 @@ period;
 
 =back
 
-=head2 C<ircd_disconnected>
+=head2 C<ircd_compressed_conn>
 
 =over
 
-=item Emitted: when a client disconnects;
+=item Emitted: when compression has been enabled for a connection
 
 =item Target: all plugins and registered sessions;
 
@@ -1734,8 +1749,6 @@ period;
 =over 4
 
 =item * C<ARG0>, the connection id;
-
-=item * C<ARG1>, the error or reason for disconnection;
 
 =back
 
@@ -1769,21 +1782,61 @@ POE::Filter::IRCD:
 
 =back
 
-=head2 C<ircd_registered>
-
-I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/syndicator_registered>>
+=head2 C<ircd_raw_input>
 
 =over
 
-=item Emitted: when a session registers with the component;
+=item Emitted: when a line of input is received from a connection
 
-=item Target: the registering session;
+=item Target: all plugins and registered sessions;
 
 =item Args:
 
 =over 4
 
-=item * C<ARG0>: the component's object;
+=item * C<ARG0>, the connection id;
+
+=item * C<ARG1>, the raw line of input
+
+=back
+
+=back
+
+=head2 C<ircd_raw_output>
+
+=over
+
+=item Emitted: when a line of output is sent over a connection
+
+=item Target: all plugins and registered sessions;
+
+=item Args:
+
+=over 4
+
+=item * C<ARG0>, the connection id;
+
+=item * C<ARG1>, the raw line of output
+
+=back
+
+=back
+
+=head2 C<ircd_disconnected>
+
+=over
+
+=item Emitted: when a client disconnects;
+
+=item Target: all plugins and registered sessions;
+
+=item Args:
+
+=over 4
+
+=item * C<ARG0>, the connection id;
+
+=item * C<ARG1>, the error or reason for disconnection;
 
 =back
 

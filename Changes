@@ -1,5 +1,12 @@
 Revision history for POE-Component-Server-IRC
 
+1.47  Sat May 21 00:14:59 GMT 2011
+    - Only load POE::Filter::Zlib::Stream when using ziplinks
+    - Backend.pm: Document create()'s plugin_debug and options parameters
+    - Add ircd_raw_(input|output) to the backend, and use them to implement
+      a 'debug' option for the frontend.
+    - IRC.pm: Only EAT events from clients, not plugins, for extensibility.
+
 1.46  Fri May 20 12:12:08 GMT 2011
     - Backend.pm: Document the 'idle', 'antiflood', and 'usessl' parameters
       to add_listener()
