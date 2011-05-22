@@ -3,12 +3,13 @@ BEGIN {
   $POE::Component::Server::IRC::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::VERSION = '1.47';
+  $POE::Component::Server::IRC::VERSION = '1.48';
 }
 
 use strict;
 use warnings;
-use IRC::Utils qw(uc_irc parse_mode_line unparse_mode_line parse_mask
+use Carp qw(croak);
+use IRC::Utils qw(uc_irc parse_mode_line unparse_mode_line normalize_mask
                   matches_mask gen_mode_change is_valid_nick_name
                   is_valid_chan_name);
 use List::Util qw(sum);
@@ -21,8 +22,9 @@ use base qw(POE::Component::Server::IRC::Backend);
 sub spawn {
     my ($package, %args) = @_;
     my $config = delete $args{config};
+    my $debug = delete $args{debug};
     my $self = $package->create(
-        (delete $args{debug} ? (raw_events => 1) : ()),
+        ($debug ? (raw_events => 1) : ()),
         %args,
         states => [
             [qw(add_spoofed_nick del_spoofed_nick)],
@@ -35,6 +37,7 @@ sub spawn {
     );
 
     $self->configure($config ? $config : ());
+    $self->{debug} = $debug;
     $self->_state_create();
     return $self;
 }
@@ -69,6 +72,7 @@ sub IRCD_connected {
         delete $self->{state}{conns}{$conn_id};
     }
 
+    $self->{state}{conns}{$conn_id}{peer}       = $name;
     $self->{state}{conns}{$conn_id}{registered} = 0;
     $self->{state}{conns}{$conn_id}{cntr}       = 1;
     $self->{state}{conns}{$conn_id}{type}       = 'u';
@@ -168,6 +172,7 @@ sub IRCD_compressed_conn {
 
 sub IRCD_raw_input {
     my ($self, $ircd) = splice @_, 0, 2;
+    return PCSI_EAT_CLIENT if !$self->{debug};
     my $conn_id = ${ $_[0] };
     my $input   = ${ $_[1] };
     warn "<<< $conn_id: $input\n";
@@ -176,6 +181,7 @@ sub IRCD_raw_input {
 
 sub IRCD_raw_output {
     my ($self, $ircd) = splice @_, 0, 2;
+    return PCSI_EAT_CLIENT if !$self->{debug};
     my $conn_id = ${ $_[0] };
     my $output   = ${ $_[1] };
     warn ">>> $conn_id: $output\n";
@@ -369,6 +375,17 @@ sub _cmd_from_unknown {
     my $invalid = 0;
 
     SWITCH: {
+        if ($cmd eq 'ERROR') {
+            my $peer = $self->{state}{conns}{$wheel_id}{peer};
+            if (defined $peer) {
+                $self->send_event_next(
+                    'daemon_error',
+                    $wheel_id,
+                    $peer,
+                    $params->[0],
+                );
+            }
+        }
         if ($cmd eq 'QUIT') {
             $self->_terminate_conn_error($wheel_id, 'Client Quit');
             last SWITCH;
@@ -3510,7 +3527,7 @@ sub _daemon_cmd_mode {
         # Bans
         if (my ($flag) = $mode =~ /[-+]b/) {
             next if ++$mode_count > $maxmodes;
-            my $mask = parse_mask($arg);
+            my $mask = normalize_mask($arg);
             my $umask = uc_irc $mask;
             if ($flag eq '+' && !$record->{bans}{$umask}) {
                 $record->{bans}{$umask}
@@ -3528,7 +3545,7 @@ sub _daemon_cmd_mode {
         # Invex
         if (my ($flag) = $mode =~ /[-+]I/) {
             next if ++$mode_count > $maxmodes;
-            my $mask = parse_mask( $arg );
+            my $mask = normalize_mask( $arg );
             my $umask = uc_irc $mask;
 
             if ($flag eq '+' && !$record->{invex}{$umask}) {
@@ -3547,7 +3564,7 @@ sub _daemon_cmd_mode {
         # Exceptions
         if (my ($flag) = $mode =~ /[-+]e/) {
             next if ++$mode_count > $maxmodes;
-            my $mask = parse_mask($arg);
+            my $mask = normalize_mask($arg);
             my $umask = uc_irc($mask);
 
                 if ($flag eq '+' && !$record->{excepts}{$umask}) {
@@ -5645,7 +5662,7 @@ sub _daemon_peer_mode {
                 }
                 # Bans
                 if (my ($flag) = $mode =~ /(\+|-)b/) {
-                    my $mask = parse_mask($arg);
+                    my $mask = normalize_mask($arg);
                     my $umask = uc_irc($mask);
                     if ($flag eq '+' && !$record->{bans}{$umask} ) {
                         $record->{bans}{$umask}
@@ -5662,7 +5679,7 @@ sub _daemon_peer_mode {
                 }
                 # Invex
                 if (my ($flag) = $mode =~ /(\+|-)I/) {
-                    my $mask = parse_mask($arg);
+                    my $mask = normalize_mask($arg);
                     my $umask = uc_irc($mask);
                     if ($flag eq '+' && !$record->{invex}{$umask}) {
                         $record->{invex}{$umask}
@@ -5679,7 +5696,7 @@ sub _daemon_peer_mode {
                 }
                 # Exceptions
                 if (my ($flag) = $mode =~ /(\+|-)e/) {
-                    my $mask = parse_mask($arg);
+                    my $mask = normalize_mask($arg);
                     my $umask = uc_irc($mask);
                     if ($flag eq '+' && !$record->{excepts}{$umask}) {
                         $record->{excepts}{$umask}
@@ -7718,7 +7735,7 @@ sub add_peer {
 
     if (!defined $parms->{name} || !defined $parms->{pass}
            || !defined $parms->{rpass}) {
-        warn "Not enough parameters specified\n";
+        croak((caller(0))[3].": Not enough parameters specified\n");
         return;
     }
 
@@ -7924,7 +7941,7 @@ sub daemon_server_mode {
             }
             # Bans
             if (my ($flag) = $mode =~ /(\+|-)b/) {
-                my $mask = parse_mask($arg);
+                my $mask = normalize_mask($arg);
                 my $umask = uc_irc($mask);
                 if ($flag eq '+' && !$record->{bans}{$umask}) {
                     $record->{bans}{$umask}
@@ -7937,7 +7954,7 @@ sub daemon_server_mode {
             }
             # Invex
             if (my ($flag) = $mode =~ /(\+|-)I/) {
-                my $mask = parse_mask($arg);
+                my $mask = normalize_mask($arg);
                 my $umask = uc_irc($mask);
                 if ($flag eq '+' && !$record->{invex}->{$umask}) {
                     $record->{invex}{$umask}
@@ -7950,7 +7967,7 @@ sub daemon_server_mode {
             }
             # Exceptions
             if (my ($flag) = $mode =~ /(\+|-)e/) {
-                my $mask = parse_mask($arg);
+                my $mask = normalize_mask($arg);
                 my $umask = uc_irc($mask);
                 if ($flag eq '+' && !$record->{excepts}{$umask}) {
                     $record->{excepts}{$umask}
@@ -8385,7 +8402,7 @@ defaults to 'poco.server.irc';
 'Poco? POCO? POCO!';
 
 =item * B<'network'>, the name of the IRC network you will be creating,
-defaults tp 'poconet';
+defaults to 'poconet';
 
 =item * B<'nicklen'>, the max length of nicknames to support, defaults
 to 9. B<Note>: the nicklen must be the same on all servers on your IRC
@@ -8459,9 +8476,9 @@ objects;
 
 =back
 
-A scalar ipmask can be contain '*' to match any number of characters or
-'?' to match one character. If no 'ipmask' is provided, operators are only
-allowed to OPER from the loopback interface.
+A scalar ipmask can contain '*' to match any number of characters or '?' to
+match one character. If no 'ipmask' is provided, operators are only allowed
+to OPER from the loopback interface.
 
 B<'password'> can be either plain-text, L<C<crypt>|crypt>'d or unix/apache
 md5. See the C<mkpasswd> function in
@@ -8843,6 +8860,28 @@ Takes two arguments, a spoofed nickname and the text message to send to
 all operators.
 
 =head1 OUTPUT EVENTS
+
+=head2 C<ircd_daemon_error>
+
+=over
+
+=item Emitted: when we fail to register with peer;
+
+=item Target: all plugins and registered sessions;
+
+=item Args:
+
+=over 4
+
+=item * C<ARG0>, the connection id;
+
+=item * C<ARG1>, the server name;
+
+=item * C<ARG2>, the reason;
+
+=back
+
+=back
 
 =head2 C<ircd_daemon_server>
 
@@ -9286,7 +9325,7 @@ B<Note:> the component will shutdown, this is a feature;
 
 =back
 
-=head2 C<ircd_daemon_rkline>
+=head2 C<ircd_daemon_unkline>
 
 =over
 

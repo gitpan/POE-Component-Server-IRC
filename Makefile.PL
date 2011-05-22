@@ -12,7 +12,7 @@ my %WriteMakefileArgs = (
   'ABSTRACT' => 'A fully event-driven networkable IRC server daemon module.',
   'AUTHOR' => 'Chris Williams <chris@bingosnet.co.uk>, Hinrik Örn Sigurðsson <hinrik.sig@gmail.com>',
   'BUILD_REQUIRES' => {
-    'POE::Component::IRC' => '6.51',
+    'POE::Component::IRC' => '6.68',
     'Test::More' => '0.47'
   },
   'CONFIGURE_REQUIRES' => {
@@ -26,14 +26,16 @@ my %WriteMakefileArgs = (
   'NAME' => 'POE::Component::Server::IRC',
   'PREREQ_PM' => {
     'Crypt::PasswdMD5' => '1.3',
-    'IRC::Utils' => '0.09',
+    'IRC::Utils' => '0.10',
     'List::Util' => '0',
     'Net::Netmask' => '1.9012',
     'POE' => '0.9999',
+    'POE::Component::Client::DNS' => '1.00',
+    'POE::Component::Client::Ident' => '1.00',
     'POE::Component::Syndicator' => '0.04',
     'POE::Filter::IRCD' => '2.2'
   },
-  'VERSION' => '1.47',
+  'VERSION' => '1.48',
   'test' => {
     'TESTS' => 't/*.t'
   }

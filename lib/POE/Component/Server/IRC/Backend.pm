@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::Backend::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::Backend::VERSION = '1.47';
+  $POE::Component::Server::IRC::Backend::VERSION = '1.48';
 }
 
 use strict;
@@ -12,7 +12,6 @@ use Carp qw(croak);
 use List::Util qw(first);
 use POE qw(Wheel::SocketFactory Wheel::ReadWrite Filter::Stackable
            Filter::Line Filter::IRCD);
-use POE::Component::Server::IRC::Plugin qw(:ALL);
 use Net::Netmask;
 use Socket qw(unpack_sockaddr_in inet_ntoa);
 use base qw(POE::Component::Syndicator);
@@ -198,6 +197,8 @@ sub _accept_failed {
     my ($kernel, $self, $operation, $errnum, $errstr, $listener_id)
         = @_[KERNEL, OBJECT, ARG0..ARG3];
 
+    my $port = $self->{listeners}{$listener_id}{port};
+    my $addr = $self->{listeners}{$listener_id}{addr};
     delete $self->{listeners}{$listener_id};
     $self->send_event(
         "$self->{prefix}listener_failure",
@@ -205,6 +206,8 @@ sub _accept_failed {
         $operation,
         $errnum,
         $errstr,
+        $port,
+        $addr,
     );
     return;
 }
@@ -295,6 +298,7 @@ sub _add_listener {
 
     $args{ lc($_) } = delete $args{$_} for keys %args;
 
+    my $bindaddr  = $args{bindaddr} || '0.0.0.0';
     my $bindport  = $args{port} || 0;
     my $idle      = $args{idle} || 180;
     my $auth      = 1;
@@ -305,29 +309,32 @@ sub _add_listener {
     $antiflood = 0 if defined $args{antiflood} && $args{antiflood} eq '0';
 
     my $listener = POE::Wheel::SocketFactory->new(
+        BindAddress  => $bindaddr,
         BindPort     => $bindport,
         SuccessEvent => '_accept_connection',
         FailureEvent => '_accept_failed',
         Reuse        => 'on',
-        ($args{bindaddr} ? (BindAddress => $args{bindaddr}) : ()),
         ($args{listenqueue} ? (ListenQueue => $args{listenqueue}) : ()),
     );
 
-    if ($listener) {
-        my $port = (unpack_sockaddr_in($listener->getsockname))[0];
-        my $listener_id = $listener->ID();
+    my $id = $listener->ID();
+    $self->{listeners}{$id}{wheel}     = $listener;
+    $self->{listeners}{$id}{port}      = $bindport;
+    $self->{listeners}{$id}{addr}      = $bindaddr;
+    $self->{listeners}{$id}{idle}      = $idle;
+    $self->{listeners}{$id}{auth}      = $auth;
+    $self->{listeners}{$id}{antiflood} = $antiflood;
+    $self->{listeners}{$id}{usessl}    = $usessl;
+
+    my ($port, $addr) = unpack_sockaddr_in($listener->getsockname);
+    if ($port) {
+        $self->{listeners}{$id}{port} = $port;
         $self->send_event(
             $self->{prefix} . 'listener_add',
             $port,
-            $listener_id,
+            $id,
+            $bindaddr,
         );
-        $self->{listening_ports}{$port} = $listener_id;
-        $self->{listeners}{$listener_id}{wheel}     = $listener;
-        $self->{listeners}{$listener_id}{port}      = $port;
-        $self->{listeners}{$listener_id}{idle}      = $idle;
-        $self->{listeners}{$listener_id}{auth}      = $auth;
-        $self->{listeners}{$listener_id}{antiflood} = $antiflood;
-        $self->{listeners}{$listener_id}{usessl}    = $usessl;
     }
     return;
 }
@@ -344,29 +351,33 @@ sub _del_listener {
     my %args = @_[ARG0..$#_];
 
     $args{lc $_} = delete $args{$_} for keys %args;
-
     my $listener_id = delete $args{listener};
     my $port = delete $args{port};
 
     if ($self->_listener_exists($listener_id)) {
-        $port = delete $self->{listeners}{$listener_id}{port};
-        delete $self->{listening_ports}{$port};
+        my $port = $self->{listeners}{$listener_id}{port};
+        my $addr = $self->{listeners}{$listener_id}{addr};
         delete $self->{listeners}{$listener_id};
         $self->send_event(
             $self->{prefix} . 'listener_del',
             $port,
             $listener_id,
+            $addr,
         );
     }
-
-    if ($self->_port_exists($port)) {
-        $listener_id = delete $self->{listening_ports}{$port};
-        delete $self->{listeners}{$listener_id};
-        $self->send_event(
-            $self->{prefix} . 'listener_del',
-            $port,
-            $listener_id,
-        );
+    elsif (defined $port) {
+        while (my ($id, $listener) = each %{ $self->{listeners } }) {
+            if ($listener->{port} == $port) {
+                my $addr = $listener->{addr};
+                delete $self->{listeners}{$id};
+                $self->send_event(
+                    $self->{prefix} . 'listener_del',
+                    $port,
+                    $listener_id,
+                    $addr,
+                );
+            }
+        }
     }
 
     return;
@@ -376,13 +387,6 @@ sub _listener_exists {
     my $self = shift;
     my $listener_id = shift || return;
     return 1 if defined $self->{listeners}{$listener_id};
-    return;
-}
-
-sub _port_exists {
-    my $self = shift;
-    my $port = shift || return;
-    return 1 if defined $self->{listening_ports}->{$port};
     return;
 }
 
@@ -426,7 +430,7 @@ sub _sock_failed {
 
     my $ref = delete $self->{connectors}{$connector_id};
     delete $ref->{wheel};
-    $self->send_event("$self->{prefix}socketerr",$ref);
+    $self->send_event("$self->{prefix}socketerr", $ref, $op, $errno, $errstr);
     return;
 }
 
@@ -621,7 +625,7 @@ sub send_output {
         for my $id (grep { $self->_wheel_exists($_) } @_) {
             if ($self->{raw_events}) {
                 my $out = $self->{filter}->put([$output])->[0];
-                chomp $out;
+                $out =~ s/\015\012$//;
                 $self->send_event("$self->{prefix}raw_output", $id, $out);
             }
             $self->{wheels}{$id}{wheel}->put($output);
@@ -1155,7 +1159,8 @@ an 'ircd_backend_registered' event.
 =head3 C<shutdown>
 
 Takes no arguments. Terminates the component. Removes all listeners and
-connectors. Disconnects all current client and server connections.
+connectors. Disconnects all current client and server connections. This
+is a shorthand for C<< $ircd->yield('shutdown') >>.
 
 =head3 C<session_id>
 
@@ -1480,10 +1485,15 @@ considered idle. Defaults is 180.
 
 =head2 C<del_listener>
 
-Takes either 'port' or 'listener': 
+Takes one of the following arguments:
 
-B<'listener'> is a previously returned listener ID;
-B<'port'>, listening TCP port; 
+=over 4
+
+=item * B<'listener'>, a previously returned listener ID;
+
+=item * B<'port'>, a listening port;
+
+=back
 
 The listener will be deleted. Note: any connected clients on that port
 will not be disconnected.
@@ -1516,6 +1526,13 @@ Takes a hashref and one or more connection IDs.
      },
      @list_of_connection_ids,
  );
+
+=head2 C<shutdown>
+
+I<Inherited from L<POE::Component::Syndicator|POE::Component::Syndicator/shutdown>>
+
+Takes no arguments. Terminates the component. Removes all listeners and
+connectors. Disconnects all current client and server connections.
 
 =head1 OUTPUT EVENTS
 
@@ -1604,6 +1621,8 @@ hostname and ident;
 
 =item * C<ARG1>, the listener id;
 
+=item * C<ARG2>, the listening address;
+
 =back
 
 =back
@@ -1623,6 +1642,8 @@ hostname and ident;
 =item * C<ARG0>, the listening port;
 
 =item * C<ARG1>, the listener id;
+
+=item * C<ARG2>, the listener address;
 
 =back
 
@@ -1648,6 +1669,10 @@ hostname and ident;
 
 =item * C<ARG3>, string value for $!;
 
+=item * C<ARG4>, the port it tried to listen on;
+
+=item * C<ARG5>, the address it tried to listen on;
+
 =back
 
 =back
@@ -1666,6 +1691,12 @@ hostname and ident;
 
 =item * C<ARG0>, a HASHREF containing the params that add_connector() was
 called with;
+
+=item * C<ARG1>, the name of the operation that failed;
+
+=item * C<ARG2>, numeric value for $!;
+
+=item * C<ARG3>, string value for $!;
 
 =back
 
@@ -1692,6 +1723,8 @@ called with;
 =item * C<ARG3>, our ip address;
 
 =item * C<ARG4>, our socket port;
+
+=item * C<ARG5>, the peer's name;
 
 =back
 

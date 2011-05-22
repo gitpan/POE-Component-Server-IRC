@@ -135,7 +135,7 @@ METHODS
         POCO!';
 
     *   'network', the name of the IRC network you will be creating,
-        defaults tp 'poconet';
+        defaults to 'poconet';
 
     *   'nicklen', the max length of nicknames to support, defaults to 9.
         Note: the nicklen must be the same on all servers on your IRC
@@ -196,9 +196,9 @@ METHODS
     *   'ipmask', either a scalar ipmask or an arrayref of Net::Netmask
         objects;
 
-    A scalar ipmask can be contain '*' to match any number of characters or
-    '?' to match one character. If no 'ipmask' is provided, operators are
-    only allowed to OPER from the loopback interface.
+    A scalar ipmask can contain '*' to match any number of characters or '?'
+    to match one character. If no 'ipmask' is provided, operators are only
+    allowed to OPER from the loopback interface.
 
     'password' can be either plain-text, "crypt"'d or unix/apache md5. See
     the "mkpasswd" function in POE::Component::Server::IRC::Common for how
@@ -521,6 +521,17 @@ INPUT EVENTS
     all operators.
 
 OUTPUT EVENTS
+  "ircd_daemon_error"
+    Emitted: when we fail to register with peer;
+    Target: all plugins and registered sessions;
+    Args:
+
+        *   "ARG0", the connection id;
+
+        *   "ARG1", the server name;
+
+        *   "ARG2", the reason;
+
   "ircd_daemon_server"
     Emitted: when a server is introduced onto the network;
     Target: all plugins and registered sessions;
@@ -750,7 +761,7 @@ OUTPUT EVENTS
 
         *   "ARG5", the reason;
 
-  "ircd_daemon_rkline"
+  "ircd_daemon_unkline"
     Emitted: when an oper issues an UNKLINE command;
     Target: all plugins and registered sessions;
     Args:
