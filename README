@@ -522,7 +522,7 @@ INPUT EVENTS
 
 OUTPUT EVENTS
   "ircd_daemon_error"
-    Emitted: when we fail to register with peer;
+    Emitted: when we fail to register with a peer;
     Target: all plugins and registered sessions;
     Args:
 

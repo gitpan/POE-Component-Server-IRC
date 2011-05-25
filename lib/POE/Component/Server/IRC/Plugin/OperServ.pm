@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::Plugin::OperServ::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::Plugin::OperServ::VERSION = '1.48';
+  $POE::Component::Server::IRC::Plugin::OperServ::VERSION = '1.49';
 }
 
 use strict;
@@ -116,7 +116,7 @@ PRIVMSG commands from operators.
 =head2 C<new>
 
 Returns a plugin object suitable for feeding to
-L<POE::Component::Server::IRC|POE::Component::ServeR::IRC>'s C<plugin_add>
+L<POE::Component::Server::IRC|POE::Component::Server::IRC>'s C<plugin_add>
 method.
 
 =head1 COMMANDS

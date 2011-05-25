@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::VERSION = '1.48';
+  $POE::Component::Server::IRC::VERSION = '1.49';
 }
 
 use strict;
@@ -45,7 +45,7 @@ sub spawn {
 sub IRCD_connection {
     my ($self, $ircd) = splice @_, 0, 2;
     pop @_;
-    my ($conn_id, $peeraddr, $peerport, $sockaddr, $sockport)
+    my ($conn_id, $peeraddr, $peerport, $sockaddr, $sockport, $needs_auth)
         = map { ${ $_ } } @_;
 
     if ($self->_connection_exists($conn_id)) {
@@ -59,6 +59,15 @@ sub IRCD_connection {
         = [$peeraddr, $peerport, $sockaddr, $sockport];
 
     $self->_state_conn_stats();
+
+    if (!$needs_auth) {
+        $self->{state}{conns}{$conn_id}{auth} = {
+            hostname => '',
+            ident => '',
+        };
+        $self->_client_register($conn_id);
+    }
+
     return PCSI_EAT_CLIENT;
 }
 
@@ -183,7 +192,7 @@ sub IRCD_raw_output {
     my ($self, $ircd) = splice @_, 0, 2;
     return PCSI_EAT_CLIENT if !$self->{debug};
     my $conn_id = ${ $_[0] };
-    my $output   = ${ $_[1] };
+    my $output  = ${ $_[1] };
     warn ">>> $conn_id: $output\n";
     return PCSI_EAT_CLIENT;
 }
@@ -192,7 +201,7 @@ sub _default {
     my ($self, $ircd, $event) = splice @_, 0, 3;
     return PCSI_EAT_NONE if $event !~ /^IRCD_cmd_/;
     pop @_;
-    my ($conn_id, $input) = map { ${ $_ } } @_;
+    my ($conn_id, $input) = map { $$_ } @_;
 
     return PCSI_EAT_CLIENT if !$self->_connection_exists($conn_id);
     $self->{state}{conns}{$conn_id}{seen} = time;
@@ -208,7 +217,7 @@ sub _default {
         $self->_cmd_from_client($conn_id, $input);
     }
 
-  return PCSI_EAT_CLIENT;
+    return PCSI_EAT_CLIENT;
 }
 
 sub _auth_finished {
@@ -7786,6 +7795,13 @@ sub _terminate_conn_error {
         $conn_id,
     );
 
+    while (my ($nick, $id) = each %{ $self->{state}{pending} }) {
+        if ($id == $conn_id) {
+            delete $self->{state}{pending}{$nick};
+            last;
+        }
+    }
+
     return 1;
 }
 
@@ -8865,7 +8881,7 @@ all operators.
 
 =over
 
-=item Emitted: when we fail to register with peer;
+=item Emitted: when we fail to register with a peer;
 
 =item Target: all plugins and registered sessions;
 

@@ -5,16 +5,7 @@ use POE::Component::IRC;
 use POE::Component::Server::IRC;
 use Test::More tests => 4;
 
-my $bot1 = POE::Component::IRC->spawn(
-    plugin_debug => 1,
-    flood        => 1,
-    alias        => 'bot1',
-);
-my $bot2 = POE::Component::IRC->spawn(
-    plugin_debug => 1,
-    flood        => 1,
-    alias        => 'bot2',
-);
+my $bot1 = POE::Component::IRC->spawn(flood => 1);
 my $ircd = POE::Component::Server::IRC->spawn(
     Auth         => 0,
     AntiFlood    => 0,
@@ -30,6 +21,7 @@ POE::Session->create(
             _shutdown
             irc_001
             irc_433
+            irc_error
             irc_disconnected
         )],
     ],
@@ -40,7 +32,11 @@ $poe_kernel->run();
 sub _start {
     my ($kernel, $heap) = @_[KERNEL, HEAP];
     $ircd->yield('register', 'all');
-    $ircd->yield('add_listener');
+    $ircd->add_listener();
+    $ircd->add_auth(
+        mask     => "*",
+        password => 'foo',
+    );
     $kernel->delay(_shutdown => 60, 'Timed out');
 }
 
@@ -59,36 +55,30 @@ sub ircd_listener_add {
         port    => $port,
         ircname => 'Test test bot',
     });
-
-    $bot2->yield(register => 'all');
-    $bot2->yield(connect => {
-        nick    => 'TestBot1',
-        server  => '127.0.0.1',
-        port    => $port,
-        ircname => 'Test test bot',
-    });
 }
 
 sub irc_001 {
     my $irc = $_[SENDER]->get_heap();
-    pass($irc->session_alias() . ' logged in');
+    fail("Shouldn't be able to log in");
+}
+
+sub irc_error {
+    my ($error) = $_[ARG0];
+    like($error, qr/not authorized/, 'Not authorized to connect');
 }
 
 sub irc_433 {
     my $irc = $_[SENDER]->get_heap();
-    my $other = $irc == $bot1 ? $bot2 : $bot1;
-
-    pass($irc->session_alias . ' nick collision');
-    $other->yield('quit');
-    $irc->yield('quit');
+    fail("The nick shouldn't be taken");
 }
 
 sub irc_disconnected {
     my ($kernel, $sender, $heap) = @_[KERNEL, SENDER, HEAP];
     my $irc = $sender->get_heap();
 
-    pass($irc->session_alias() . ' disconnected');
+    pass('Disconnected');
     $heap->{count}++;
+    $irc->yield('connect') if $heap->{count} == 1;
     $kernel->yield('_shutdown') if $heap->{count} == 2;
 }
 
@@ -98,6 +88,4 @@ sub _shutdown {
     $kernel->alarm_remove_all();
     $ircd->yield('shutdown');
     $bot1->yield('shutdown');
-    $bot2->yield('shutdown');
 }
-

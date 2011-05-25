@@ -35,7 +35,7 @@ my %WriteMakefileArgs = (
     'POE::Component::Syndicator' => '0.04',
     'POE::Filter::IRCD' => '2.2'
   },
-  'VERSION' => '1.48',
+  'VERSION' => '1.49',
   'test' => {
     'TESTS' => 't/*.t'
   }

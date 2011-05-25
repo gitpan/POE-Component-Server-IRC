@@ -38,5 +38,5 @@ resources:
   homepage: http://search.cpan.org/dist/POE-Component-Server-IRC/
   license: http://dev.perl.org/licenses/
   repository: git://github.com/bingos/poe-component-server-irc.git
-version: 1.48
+version: 1.49
 x_authority: cpan:HINRIK
