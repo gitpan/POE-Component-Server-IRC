@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::Plugin::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::Plugin::VERSION = '1.49';
+  $POE::Component::Server::IRC::Plugin::VERSION = '1.50';
 }
 
 use strict;

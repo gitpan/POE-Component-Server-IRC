@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::Plugin::Auth::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::Plugin::Auth::VERSION = '1.49';
+  $POE::Component::Server::IRC::Plugin::Auth::VERSION = '1.50';
 }
 
 use strict;
@@ -284,7 +284,7 @@ sub got_ident_error {
         return;
     }
 
-    $self->send_output(
+    $ircd->send_output(
         {
             command => 'NOTICE',
             params  => ['AUTH', "*** No Ident response"],
