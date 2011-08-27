@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::Plugin::Auth::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::Plugin::Auth::VERSION = '1.50';
+  $POE::Component::Server::IRC::Plugin::Auth::VERSION = '1.51';
 }
 
 use strict;
@@ -98,6 +98,7 @@ sub IRCD_connection {
             $conn_id,
         );
         $self->{conns}{$conn_id}{hostname} = 'localhost';
+        $self->_auth_done($conn_id);
     }
     else {
         $poe_kernel->call(

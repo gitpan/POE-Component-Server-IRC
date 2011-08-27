@@ -57,7 +57,7 @@
          "mailto" : "bug-POE-Component-Server-IRC@rt.cpan.org",
          "web" : "https://rt.cpan.org/Public/Dist/Display.html?Name=POE-Component-Server-IRC"
       },
-      "homepage" : "http://search.cpan.org/dist/POE-Component-Server-IRC/",
+      "homepage" : "http://metacpan.org/release/POE-Component-Server-IRC",
       "license" : [
          "http://dev.perl.org/licenses/"
       ],
@@ -67,7 +67,7 @@
          "web" : "http://github.com/bingos/poe-component-server-irc"
       }
    },
-   "version" : "1.50",
+   "version" : "1.51",
    "x_authority" : "cpan:HINRIK"
 }
 

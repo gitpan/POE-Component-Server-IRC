@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::AUTHORITY = 'cpan:HINRIK';
 }
 BEGIN {
-  $POE::Component::Server::IRC::VERSION = '1.50';
+  $POE::Component::Server::IRC::VERSION = '1.51';
 }
 
 use strict;
@@ -8316,15 +8316,15 @@ POE::Component::Server::IRC - A fully event-driven networkable IRC server daemon
 
      print "$event: ";
      for my $arg (@$args) {
-
-     if (ref($arg) eq 'ARRAY') {
-         print "[", join ( ", ", @$arg ), "] ";
-     }
-     elsif (ref($arg) eq 'HASH') {
-         print "{", join ( ", ", %$arg ), "} ";
-     }
-     else {
-         print "'$arg' ";
+         if (ref($arg) eq 'ARRAY') {
+             print "[", join ( ", ", @$arg ), "] ";
+         }
+         elsif (ref($arg) eq 'HASH') {
+             print "{", join ( ", ", %$arg ), "} ";
+         }
+         else {
+             print "'$arg' ";
+         }
      }
 
      print "\n";
