@@ -49,3 +49,4 @@ t/ts_12_hinrik_time.t
 t/ts_13_nickrace.t
 t/ts_14_nickchange_channel.t
 t/ts_15_nick_taken.t
+t/ts_16_public.t

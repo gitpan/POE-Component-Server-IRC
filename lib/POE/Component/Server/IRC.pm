@@ -2,8 +2,8 @@ package POE::Component::Server::IRC;
 BEGIN {
   $POE::Component::Server::IRC::AUTHORITY = 'cpan:HINRIK';
 }
-BEGIN {
-  $POE::Component::Server::IRC::VERSION = '1.51';
+{
+  $POE::Component::Server::IRC::VERSION = '1.52';
 }
 
 use strict;
@@ -982,7 +982,7 @@ sub _daemon_cmd_message {
                     if ($self->_connection_is_client($route_id)) {
                         $msg->{prefix} = $full;
                     }
-                    if (!$route_id eq 'spoofed') {
+                    if ($route_id ne 'spoofed') {
                         $self->send_output($msg, $route_id);
                     }
                     else {

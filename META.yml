@@ -9,7 +9,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200006, CPAN::Meta::Converter version 2.110440'
+generated_by: 'Dist::Zilla version 4.300002, CPAN::Meta::Converter version 2.110930'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -35,8 +35,8 @@ requires:
   POE::Filter::IRCD: 2.2
 resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=POE-Component-Server-IRC
-  homepage: http://metacpan.org/release/POE-Component-Server-IRC
+  homepage: http://search.cpan.org/dist/POE-Component-Server-IRC/
   license: http://dev.perl.org/licenses/
   repository: git://github.com/bingos/poe-component-server-irc.git
-version: 1.51
+version: 1.52
 x_authority: cpan:HINRIK
