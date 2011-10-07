@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::AUTHORITY = 'cpan:HINRIK';
 }
 {
-  $POE::Component::Server::IRC::VERSION = '1.52';
+  $POE::Component::Server::IRC::VERSION = '1.53';
 }
 
 use strict;
@@ -21,6 +21,7 @@ use base qw(POE::Component::Server::IRC::Backend);
 
 sub spawn {
     my ($package, %args) = @_;
+    $args{lc $_} = delete $args{$_} for keys %args;
     my $config = delete $args{config};
     my $debug = delete $args{debug};
     my $self = $package->create(
@@ -1668,7 +1669,7 @@ sub _daemon_cmd_squit {
         $args->[0] = $self->_state_peer_name($peer);
         $args->[1] = $reason;
 
-        if (grep { $_ eq $peer }
+        if ( !grep { $_ eq $peer }
                 keys %{ $self->{state}{peers}{uc $server}{peers} }) {
             $self->send_output(
                 {
@@ -3454,7 +3455,7 @@ sub _daemon_cmd_mode {
                 push @$ref, ['441', $chan, $self->state_user_nick($arg)];
                 next;
             }
-            if (my ($flag, $char) = $mode =~ /^[-+][ohv]/ ) {
+            if (my ($flag, $char) = $mode =~ /^([-+])([ohv])/ ) {
                 next if ++$mode_count > $maxmodes;
 
                 if ($flag eq '+'
@@ -3530,7 +3531,7 @@ sub _daemon_cmd_mode {
             next;
         }
         # Bans
-        if (my ($flag) = $mode =~ /[-+]b/) {
+        if (my ($flag) = $mode =~ /([-+])b/) {
             next if ++$mode_count > $maxmodes;
             my $mask = normalize_mask($arg);
             my $umask = uc_irc $mask;
@@ -3548,7 +3549,7 @@ sub _daemon_cmd_mode {
             next;
         }
         # Invex
-        if (my ($flag) = $mode =~ /[-+]I/) {
+        if (my ($flag) = $mode =~ /([-+])I/) {
             next if ++$mode_count > $maxmodes;
             my $mask = normalize_mask( $arg );
             my $umask = uc_irc $mask;
@@ -3567,7 +3568,7 @@ sub _daemon_cmd_mode {
             next;
         }
         # Exceptions
-        if (my ($flag) = $mode =~ /[-+]e/) {
+        if (my ($flag) = $mode =~ /([-+])e/) {
             next if ++$mode_count > $maxmodes;
             my $mask = normalize_mask($arg);
             my $umask = uc_irc($mask);
