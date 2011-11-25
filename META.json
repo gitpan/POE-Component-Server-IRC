@@ -5,7 +5,7 @@
       "Hinrik \u00c3\u0096rn Sigur\u00c3\u00b0sson <hinrik.sig@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300002, CPAN::Meta::Converter version 2.110930",
+   "generated_by" : "Dist::Zilla version 4.300003, CPAN::Meta::Converter version 2.110930",
    "license" : [
       "perl_5"
    ],
@@ -67,7 +67,7 @@
          "web" : "http://github.com/bingos/poe-component-server-irc"
       }
    },
-   "version" : "1.53",
+   "version" : "1.54",
    "x_authority" : "cpan:HINRIK"
 }
 

@@ -3,7 +3,7 @@ BEGIN {
   $POE::Component::Server::IRC::Backend::AUTHORITY = 'cpan:HINRIK';
 }
 {
-  $POE::Component::Server::IRC::Backend::VERSION = '1.53';
+  $POE::Component::Server::IRC::Backend::VERSION = '1.54';
 }
 
 use strict;
@@ -685,6 +685,11 @@ sub _disconnected {
         $wheel_id,
         $errstr || 'Client Quit',
     );
+
+    if ( $^O =~ /(cygwin|MSWin)/ ) {
+      $conn->{wheel}->shutdown_input();
+      $conn->{wheel}->shutdown_output();
+    }
 
     return 1;
 }
